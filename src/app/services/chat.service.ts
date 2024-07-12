@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { generateText , generateObject } from 'ai';  // Asegúrate de importar la librería correcta
 import { createOpenAI } from '@ai-sdk/openai';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 import { z } from 'zod';
 
 @Injectable({
