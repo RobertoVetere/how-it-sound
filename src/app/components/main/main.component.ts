@@ -61,6 +61,7 @@ audioPlayer: HTMLAudioElement | null = null;
       this.songDescription = objectResult.description;
       this.searchSong(this.songTitle);
       this.songInfo = true;
+      this.applyGradientBackground();
       document.querySelector('main')?.classList.add('bg-gradient-animation');
     }
   }
@@ -98,4 +99,15 @@ audioPlayer: HTMLAudioElement | null = null;
         console.error('Error al buscar canción en Deezer:', error.message);
       }
     );
-  }}
+  }
+private applyGradientBackground() {
+    //const gradient = `linear-gradient(-45deg, ${this.colors.join(', ')})`;
+    //this.renderer.setStyle(this.elementRef.nativeElement.querySelector('main'), 'background', gradient);
+    document.querySelector('main')?.classList.add('bg-gradient-animation');
+  }
+
+  private removeGradientBackground() {
+    //this.renderer.setStyle(this.elementRef.nativeElement.querySelector('main'), 'background', '');
+    document.querySelector('main')?.classList.remove('bg-gradient-animation');
+  }
+}
