@@ -1,27 +1,45 @@
-<div
-  class="fixed top-0 w-full border-b border-gray-200 bg-white/50 backdrop-blur-xl z-30 transition-all"
->
-  <div
-    class="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto"
-  >
-    <a class="flex items-center font-display text-2xl" href="/"
-      ><img src="logo.png" width="180" height="" class="mr-8" />
+<div class="fixed top-0 w-full border-b border-gray-200 bg-white/50 backdrop-blur-xl z-30 transition-all">
+  <div class="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
+    <a class="flex items-center font-display text-2xl" [routerLink]="['/']" routerLinkActive="router-link-active">
+      <img src="logo.png" width="180" height="" class="mr-8" />
     </a>
-    <div>
-      <span
-        class="relative flex shrink-0 overflow-hidden rounded-full size-9 cursor-pointer"
-        type="button"
-        id="radix-:rc:"
-        aria-haspopup="menu"
+    <div class="relative">
+      <!-- Imagen del usuario con menú desplegable -->
+      <button
+        id="userMenu"
+        aria-haspopup="true"
         aria-expanded="false"
-        data-state="closed"
-        ><img
-          class="aspect-square h-full w-full"
+        class="relative flex items-center justify-center h-10 w-10 rounded-full overflow-hidden focus:outline-none"
+        (click)="toggleUserMenu()"
+      >
+        <img
+          class="h-full w-full object-cover"
           alt="roberto.vetere@gmail.com"
           width="40"
           height="40"
           src="https://lh3.googleusercontent.com/a/ACg8ocJwJOdQ_V8-48j1go9HwA8l9sgs94WPecYyE7sD_By6sEmAhomR=s96-c"
-      /></span>
+        />
+      </button>
+
+      <!-- Menú desplegable -->
+      <div
+        *ngIf="isUserMenuOpen"
+        id="userMenuDropdown"
+        class="absolute right-0 mt-12 w-48 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="userMenu"
+      >
+        <a
+          [routerLink]="['/profile']"
+          routerLinkActive="router-link-active"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          role="menuitem"
+        >
+          Profile
+        </a>
+        <!-- Agrega más opciones según sea necesario -->
+      </div>
     </div>
   </div>
 </div>
