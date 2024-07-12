@@ -12,7 +12,7 @@ export class ChatService {
 
   constructor() { }
 
-  async analyzeTextWithImage(imageFile: File, apiKey: string) {
+  async analyzeTextWithImage(imageFile: File) {
   try {
     const imageToBase64 = await this.readFileAsBase64(imageFile);
 

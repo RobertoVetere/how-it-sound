@@ -1,4 +1,4 @@
-import { Component, NgModule   } from '@angular/core';
+import { Component, ElementRef, Renderer2    } from '@angular/core';
 import { ChatService } from '../../services/chat.service'; 
 import { CommonModule } from '@angular/common';
 import { TypingService } from '../../services/typing.service';
@@ -18,7 +18,9 @@ saveToGallery() {
 throw new Error('Method not implemented.');
 }
 audioPlayer: HTMLAudioElement | null = null;
-  constructor(private chatService: ChatService, private typingService: TypingService, private deezerService: DeezerService) {}
+  constructor(private chatService: ChatService, private typingService: TypingService, private deezerService: DeezerService,
+    private renderer: Renderer2,
+    private elementRef: ElementRef) {}
 
   imageSrc: string = 'djs.jpg';
   selectedFile: File | null = null;
@@ -28,7 +30,7 @@ audioPlayer: HTMLAudioElement | null = null;
   songInfo: boolean = false;
   songLink: string = '';
   apiKey: string = '';
-  //audioSrc: string = '';
+  colors: string[] = [];
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -55,14 +57,16 @@ audioPlayer: HTMLAudioElement | null = null;
       alert('Añade tu clave Api de OpenAi');
     }
 
-    const objectResult = await this.chatService.analyzeTextWithImage(this.selectedFile, this.apiKey);
-    if(objectResult){
+    try {
+      const objectResult = await this.chatService.analyzeTextWithImage(this.selectedFile);
       this.songTitle = objectResult.title;
       this.songDescription = objectResult.description;
+      this.colors = objectResult.colors;
       this.searchSong(this.songTitle);
       this.songInfo = true;
-      this.applyGradientBackground();
-      document.querySelector('main')?.classList.add('bg-gradient-animation');
+      this.applyGradientBackground(); // Aplicar fondo gradiente después de cargar los colores
+    } catch (error) {
+      console.error('Error al analizar la imagen:', error);
     }
   }
 
@@ -101,13 +105,14 @@ audioPlayer: HTMLAudioElement | null = null;
     );
   }
 private applyGradientBackground() {
-    //const gradient = `linear-gradient(-45deg, ${this.colors.join(', ')})`;
-    //this.renderer.setStyle(this.elementRef.nativeElement.querySelector('main'), 'background', gradient);
+    const gradient = `linear-gradient(-45deg, ${this.colors.join(', ')})`;
+    document.querySelector('main')?.style, 'background', gradient;
     document.querySelector('main')?.classList.add('bg-gradient-animation');
+    
   }
 
   private removeGradientBackground() {
-    //this.renderer.setStyle(this.elementRef.nativeElement.querySelector('main'), 'background', '');
+    this.renderer.setStyle(this.elementRef.nativeElement.querySelector('main'), 'background', '');
     document.querySelector('main')?.classList.remove('bg-gradient-animation');
   }
 }
