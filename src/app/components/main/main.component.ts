@@ -79,14 +79,13 @@ audioPlayer: HTMLAudioElement | null = null;
     this.deezerService.findSongOnDeezer(songTitle).subscribe(
       (link: string) => {
         this.songLink = link; // Asigna el enlace de la canción a la variable 'songLink'
-         this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
-        // Reproducir automáticamente la canción al obtener el enlace
-        const audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
-        if (audioPlayer) {
-          audioPlayer.load(); // Cargar la nueva fuente de audio
-          audioPlayer.loop = true;
-          audioPlayer.volume = 0.5;
-          audioPlayer.play(); // Comenzar la reproducción
+        this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
+       
+        if ( this.audioPlayer) {
+          this.audioPlayer.load(); // Cargar la nueva fuente de audio
+          this.audioPlayer.loop = true;
+          this.audioPlayer.volume = 0.5;
+          this.audioPlayer.play(); // Comenzar la reproducción
           this.audioPlayer.addEventListener('pause', () => {
             document.querySelector('main')?.classList.remove('bg-gradient-animation');
           });
