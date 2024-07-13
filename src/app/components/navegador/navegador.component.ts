@@ -20,6 +20,7 @@ export class NavegadorComponent implements OnInit, OnDestroy {
 
   isUserMenuOpen = false;
   private routerSubscription: Subscription | undefined;
+  profileImage: string = '';
 
   constructor(private router: Router, private googleAuthService: GoogleAuthService) {}
 
@@ -33,6 +34,14 @@ export class NavegadorComponent implements OnInit, OnDestroy {
       // Verificar si hay un usuario logado al cambiar de página
       const loggedInUser = sessionStorage.getItem('loggedInUser');
       this.isLoggedIn = !!loggedInUser; 
+
+      // Asegurar que loggedInUser no sea null antes de acceder a 'picture'
+      if (loggedInUser) {
+        const user = JSON.parse(loggedInUser);
+        this.profileImage = user.picture ?? ''; // Usa '??' para establecer un valor por defecto si user.picture es null o undefined
+      } else {
+        this.profileImage = ''; // Otra lógica de imagen por defecto si no hay usuario logueado
+      }
     }
   });
 

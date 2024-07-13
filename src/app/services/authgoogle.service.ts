@@ -46,7 +46,7 @@ export class GoogleAuthService {
       const payLoad = this.decodeToken(response.credential);
       sessionStorage.setItem("loggedInUser", JSON.stringify(payLoad));
       this.router.navigate(['/home'])
-
+      
     }
   }
 
