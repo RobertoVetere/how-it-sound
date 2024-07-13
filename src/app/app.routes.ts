@@ -6,9 +6,10 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './auth.guard';
+import { IntroComponent } from './pages/intro/intro.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: '', component: IntroComponent, pathMatch: 'full'},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   { path: 'profile', component: ProfileComponent,  canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },

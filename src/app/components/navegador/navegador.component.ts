@@ -17,7 +17,7 @@ import { GoogleAuthService } from '../../services/authgoogle.service';
 export class NavegadorComponent implements OnInit, OnDestroy {
 
   isLoggedIn: boolean = false;
-
+  username: string = '';
   isUserMenuOpen = false;
   private routerSubscription: Subscription | undefined;
   profileImage: string = '';
@@ -39,6 +39,7 @@ export class NavegadorComponent implements OnInit, OnDestroy {
       if (loggedInUser) {
         const user = JSON.parse(loggedInUser);
         this.profileImage = user.picture ?? ''; // Usa '??' para establecer un valor por defecto si user.picture es null o undefined
+        this.username = user.name ? user.name.split(' ')[0] : '';
       } else {
         this.profileImage = ''; // Otra lógica de imagen por defecto si no hay usuario logueado
       }

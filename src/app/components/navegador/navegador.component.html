@@ -11,55 +11,63 @@
     >
       <img src="logo.png" width="180" height="" class="mr-8" />
     </a>
-    <div *ngIf="isLoggedIn" class="relative">
+    <!-- Contenedor para la imagen y el nombre -->
+    <div class="flex items-center">
       <!-- Imagen del usuario con menú desplegable -->
-      <button
-        id="userMenu"
-        aria-haspopup="true"
-        aria-expanded="false"
-        class="relative flex items-center justify-center h-10 w-10 rounded-full overflow-hidden focus:outline-none"
-        (click)="toggleUserMenu()"
-      >
-        <img
-          class="h-full w-full object-cover"
-          alt="user profile picture"
-          width="40"
-          height="40"
-          [src]="profileImage"
-        />
-      </button>
-
-      <!-- Menú desplegable -->
-      <div
-        *ngIf="isUserMenuOpen"
-        id="userMenuDropdown"
-        class="absolute right-0 mt-12 w-48 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="userMenu"
-      >
-        <a
-          [routerLink]="['/profile']"
-          routerLinkActive="router-link-active"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          role="menuitem"
+      <div *ngIf="isLoggedIn" class="relative">
+        <button
+          id="userMenu"
+          aria-haspopup="true"
+          aria-expanded="false"
+          class="relative flex items-center justify-center h-10 w-10 rounded-full overflow-hidden focus:outline-none"
+          (click)="toggleUserMenu()"
         >
-          Profile
-        </a>
-        <a
-          href="javascript:void(0)"
-          (click)="handleSignout()"
-          routerLinkActive="router-link-active"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          role="menuitem"
+          <img
+            class="h-full w-full object-cover"
+            alt="user profile picture"
+            width="40"
+            height="40"
+            [src]="profileImage"
+          />
+        </button>
+        <!-- Menú desplegable -->
+        <div
+          *ngIf="isUserMenuOpen"
+          id="userMenuDropdown"
+          class="absolute right-0 mt-12 w-48 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="userMenu"
         >
-          Sign Out
-        </a>
-        <!-- Agrega más opciones según sea necesario -->
+          <a
+            [routerLink]="['/profile']"
+            routerLinkActive="router-link-active"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            role="menuitem"
+          >
+            Profile
+          </a>
+          <a
+            href="javascript:void(0)"
+            (click)="handleSignout()"
+            routerLinkActive="router-link-active"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            role="menuitem"
+          >
+            Sign Out
+          </a>
+          <!-- Agrega más opciones según sea necesario -->
+        </div>
       </div>
+      <!-- Nombre del usuario -->
+      <p class="relative text-2xl font-bold">
+        <span *ngIf="isLoggedIn" class="ml-2 gradient-text-animation text-3x"
+          >Hola, {{ username }}!</span
+        >
+      </p>
     </div>
+    <!-- Botón de Login -->
     <div *ngIf="!isLoggedIn" class="ml-4">
-      <!-- Botón de Login -->
       <a
         [routerLink]="['/login']"
         routerLinkActive="router-link-active"

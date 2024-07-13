@@ -5,7 +5,7 @@
     <h2
       class="bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-2xl md:text-4xl font-bold tracking-[0.02em] text-transparent drop-shadow-sm mb-6"
     >
-      Configuración de API Key
+      Open AI API key settings
     </h2>
     <div class="space-y-4">
       <div class="flex flex-col">
@@ -18,7 +18,7 @@
           id="apiKey"
           name="apiKey"
           class="border border-gray-300 rounded-full px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Introduce tu API Key"
+          placeholder="Enter your API Key"
           required
         />
       </div>
@@ -36,6 +36,47 @@
           Delete API Key
         </button>
       </div>
+    </div>
+    <!-- Indicador visual de API Key guardada -->
+    <div
+      *ngIf="isApiKeySaved"
+      class="mt-4 flex items-center justify-left text-green-600"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 mr-2"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.636 9.707l-1.293-1.293a1 1 0 011.414-1.414l1.293 1.293 4.95-4.95a1 1 0 111.415 1.415l-5.657 5.657a1 1 0 01-1.415 0z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      <span>API Key saved</span>
+    </div>
+
+    <!-- Video tutorial link -->
+    <div class="mt-4 flex items-center justify-left text-blue-600">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 mr-2"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.636 9.707l-1.293-1.293a1 1 0 011.414-1.414l1.293 1.293 4.95-4.95a1 1 0 111.415 1.415l-5.657 5.657a1 1 0 01-1.415 0z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      <a
+        href="https://www.youtube.com/watch?v=gBSh9JI28UQ&ab_channel=LeonvanZyl"
+        target="_blank"
+        class="underline"
+        >Learn how to generate your API Key</a
+      >
     </div>
   </div>
 </div>
