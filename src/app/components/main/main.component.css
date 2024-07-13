@@ -71,7 +71,6 @@ h1.bg-gradient-to-br.from-black.to-stone-500.bg-clip-text.text-center.font-displ
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   background-size: 400% 400%;
   animation: gradient 2s ease infinite;
-  height: 100% !important;
 }
 
 @keyframes gradient {

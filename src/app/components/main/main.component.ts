@@ -113,6 +113,6 @@ private applyGradientBackground() {
 
   private removeGradientBackground() {
     this.renderer.setStyle(this.elementRef.nativeElement.querySelector('main'), 'background', '');
-    document.querySelector('main')?.classList.remove('bg-gradient-animation');
+    document.querySelector('body')?.classList.remove('bg-gradient-animation');
   }
 }
