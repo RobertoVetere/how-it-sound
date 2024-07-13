@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavegadorComponent } from './components/navegador/navegador.component';
 import { RouterOutlet } from '@angular/router';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
