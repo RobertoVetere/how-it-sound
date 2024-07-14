@@ -1,0 +1,101 @@
+<!-- Mobile Navigation Component -->
+<nav
+  *ngIf="isLoggedIn"
+  class="fixed bottom-0 left-0 right-0 bg-white shadow-md z-50 md:hidden"
+>
+  <div class="flex justify-around items-center h-16">
+    <a
+      [routerLink]="['/home']"
+      class="flex flex-col items-center justify-center text-gray-700 hover:text-black"
+    >
+      <svg
+        class="h-6 w-6 mb-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7m-2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-7m0 0L3 12z"
+        ></path>
+      </svg>
+      <span class="text-xs">Home</span>
+    </a>
+    <a
+      [routerLink]="['/gallery']"
+      class="flex flex-col items-center justify-center text-gray-700 hover:text-black"
+    >
+      <svg
+        class="h-6 w-6 mb-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 16v-1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v1m-6-5H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4m10-7h-2m-2 0h-2m-2 0h-2m-2 0h-2m6 0v-6a2 2 0 1 0-4 0v6m4 0a2 2 0 1 0-4 0v6m4 0v-6m0 6v6m-4-6v6"
+        ></path>
+      </svg>
+      <span class="text-xs">Gallery</span>
+    </a>
+    <a
+      [routerLink]="['/profile']"
+      class="flex flex-col items-center justify-center text-gray-700 hover:text-black"
+    >
+      <svg
+        class="h-6 w-6 mb-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5.121 17.804A8.001 8.001 0 0 1 4 12a8.001 8.001 0 0 1 1.121-4.804M7 8a4 4 0 0 1 10 0m-2 8H9m0 0v2a2 2 0 1 0 4 0v-2m-4 0a2 2 0 1 0 4 0"
+        ></path>
+      </svg>
+      <span class="text-xs">Profile</span>
+    </a>
+    <!-- Icono de Cerrar Sesión -->
+    <button
+      class="flex flex-col items-center justify-center text-gray-700 hover:text-black"
+      (click)="handleSignout()"
+    >
+      <svg
+        class="h-6 w-6 mb-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14z"
+        ></path>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 14H14"
+        ></path>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6v8"
+        ></path>
+      </svg>
+      <span class="text-xs">Logout</span>
+    </button>
+  </div>
+</nav>

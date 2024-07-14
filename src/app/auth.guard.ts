@@ -23,4 +23,6 @@ export class AuthGuard implements CanActivate {
     const loggedInUser = sessionStorage.getItem('loggedInUser');
     return !!loggedInUser; // Devuelve true si hay un usuario autenticado en sessionStorage
   }
+
+  
 }

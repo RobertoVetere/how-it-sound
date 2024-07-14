@@ -30,10 +30,10 @@ export class LoginComponent implements OnInit {
           callback: (resp: any) => this.googleAuthService.handleLogin(resp) 
         });
         google.accounts.id.renderButton(document.getElementById('gmail-btn'), {
-          theme: 'dark',
+          theme: 'filled-blue',
           size: 'large',
           shape: 'rectangle',
-          width: 380 
+          width: 300
         });
       }).catch((error: any) => {
         console.error('Error loading Google script:', error);
