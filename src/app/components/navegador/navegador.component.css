@@ -19,3 +19,7 @@
     background-position: 0% 50%;
   }
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

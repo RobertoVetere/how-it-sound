@@ -1,1 +1,68 @@
-<p>intro works!</p>
+<div class="flex flex-col items-center justify-center pt-24 antialiased">
+  <div class="z-10 max-w-5xl">
+    <h1
+      class="bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-4xl font-bold tracking-[0.02em] text-transparent drop-shadow-sm md:text-7xl md:leading-[5rem] p-2 md:p-4"
+    >
+      How it sound your pics?
+    </h1>
+    <p class="py-8 text-center text-gray-500 md:text-xl">
+      Do you want to discover which song fits perfectly with your photo? Upload
+      your image and let the artificial intelligence find the perfect match!
+    </p>
+  </div>
+</div>
+
+<div class="flex items-center justify-center bg-gray-0">
+  <div class="slider">
+    <div class="slide-track">
+      <!-- Iteración con *ngFor - Original -->
+      <div
+        class="slide p-4 flex items-center justify-center"
+        *ngFor="let image of images"
+      >
+        <div
+          (mouseenter)="playAudio()"
+          (mouseleave)="pauseAudio()"
+          class="border rounded-lg overflow-hidden shadow-lg transform transition-transform hover:scale-110 relative"
+        >
+          <!-- Imagen -->
+          <img
+            [src]="image.src"
+            class="h-64 w-96 object-cover rounded-lg"
+            alt=""
+          />
+
+          <!-- Audio asociado oculto -->
+          <audio #audioPlayer [src]="image.audioSrc" class="hidden">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+      <!-- Fin de iteración - Original -->
+      <!-- Iteración con *ngFor - Duplicado para transición suave -->
+      <div
+        class="slide p-4 flex items-center justify-center"
+        *ngFor="let image of images"
+      >
+        <div
+          (mouseenter)="playAudio()"
+          (mouseleave)="pauseAudio()"
+          class="border rounded-lg overflow-hidden shadow-lg transform transition-transform hover:scale-110 relative"
+        >
+          <!-- Imagen -->
+          <img
+            [src]="image.src"
+            class="h-64 w-96 object-cover rounded-lg"
+            alt=""
+          />
+
+          <!-- Audio asociado oculto -->
+          <audio #audioPlayer [src]="image.audioSrc" class="hidden">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+      <!-- Fin de iteración - Duplicado -->
+    </div>
+  </div>
+</div>

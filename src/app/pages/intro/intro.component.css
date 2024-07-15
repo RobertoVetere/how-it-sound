@@ -1,0 +1,32 @@
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(
+      calc(-350px * 14)
+    ); /* Ajusta según la cantidad de duplicados */
+  }
+}
+
+.slider {
+  height: 100%;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.slide-track {
+  display: flex;
+  width: calc(350px * 28); /* Ajusta según la cantidad de duplicados */
+  animation: scroll 60s linear infinite;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+.slide {
+  height: 100%;
+  width: 350px;
+}

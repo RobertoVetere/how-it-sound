@@ -4,6 +4,7 @@
   <div
     class="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto"
   >
+    <!-- Logo -->
     <a
       class="hidden md:block flex items-center font-display text-2xl"
       [routerLink]="['/']"
@@ -11,10 +12,11 @@
     >
       <img src="logo.png" width="180" height="" class="mr-8" />
     </a>
-    <!-- Contenedor para la imagen y el nombre -->
+
+    <!-- Menú de Usuario -->
     <div class="flex items-center">
-      <!-- Imagen del usuario con menú desplegable -->
       <div *ngIf="isLoggedIn" class="relative">
+        <!-- Botón de Menú -->
         <button
           id="userMenu"
           aria-haspopup="true"
@@ -30,42 +32,44 @@
             [src]="profileImage"
           />
         </button>
-        <!-- Menú desplegable -->
+
+        <!-- Menú Desplegable -->
         <div
           *ngIf="isUserMenuOpen"
           id="userMenuDropdown"
-          class="hidden md:block absolute right-0 mt-12 w-48 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="userMenu"
+          class="hidden md:block absolute right-0 mt-12 w-48 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10 transition-transform transform origin-top"
         >
+          <!-- Opciones del Menú -->
           <a
             [routerLink]="['/profile']"
             routerLinkActive="router-link-active"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
             role="menuitem"
           >
             Profile
           </a>
           <a
-            href="javascript:void(0)"
             (click)="handleSignout()"
             routerLinkActive="router-link-active"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors duration-200"
             role="menuitem"
           >
             Sign Out
           </a>
-          <!-- Agrega más opciones según sea necesario -->
         </div>
       </div>
-      <!-- Nombre del usuario -->
-      <p class="relative text-2xl font-bold">
+
+      <!-- Saludo al Usuario -->
+      <p
+        (click)="toggleUserMenu()"
+        class="relative text-2xl font-bold cursor-pointer"
+      >
         <span *ngIf="isLoggedIn" class="ml-2 gradient-text-animation text-3x"
           >Hola, {{ username }}!</span
         >
       </p>
     </div>
+
     <!-- Botón de Login -->
     <div *ngIf="!isLoggedIn" class="ml-4">
       <a
