@@ -25,33 +25,34 @@ export class NavegadorComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private googleAuthService: GoogleAuthService) {}
 
   ngOnInit() {
-  // Suscripción a los eventos de navegación
-  this.routerSubscription = this.router.events.subscribe(event => {
-    if (event instanceof NavigationEnd) {
-      // Cerrar el menú de usuario al cambiar de página
-      this.isUserMenuOpen = false;
+    // Suscripción a los cambios de autenticación
+    this.googleAuthService.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+      this.updateUserProfile();
+    });
 
-      // Verificar si hay un usuario logado al cambiar de página
-      const loggedInUser = sessionStorage.getItem('loggedInUser');
-      this.isLoggedIn = !!loggedInUser; 
-
-      // Asegurar que loggedInUser no sea null antes de acceder a 'picture'
-      if (loggedInUser) {
-        const user = JSON.parse(loggedInUser);
-        this.profileImage = user.picture ?? ''; // Usa '??' para establecer un valor por defecto si user.picture es null o undefined
-        this.username = user.name ? user.name.split(' ')[0] : '';
-      } else {
-        this.profileImage = ''; // Otra lógica de imagen por defecto si no hay usuario logueado
+    // Suscripción a los eventos de navegación
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // Cerrar el menú de usuario al cambiar de página
+        this.isUserMenuOpen = false;
+        // Actualizar el perfil del usuario
+        this.updateUserProfile();
       }
+    });
+  }
+
+   private updateUserProfile() {
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      this.profileImage = user.picture ?? ''; // Usa '??' para establecer un valor por defecto si user.picture es null o undefined
+      this.username = user.name ? user.name.split(' ')[0] : '';
+    } else {
+      this.profileImage = ''; // Otra lógica de imagen por defecto si no hay usuario logueado
+      this.username = '';
     }
-  });
-
-  // Verificar si hay un usuario logado al iniciar el componente
-  const loggedInUser = sessionStorage.getItem('loggedInUser');
-  this.isLoggedIn = !!loggedInUser; 
-
-  // Otra lógica de inicialización si es necesaria
-}
+  }
 
   ngOnDestroy() {
     if (this.routerSubscription) {
@@ -65,7 +66,6 @@ export class NavegadorComponent implements OnInit, OnDestroy {
   }
 
   handleSignout() {
-    sessionStorage.removeItem("loggedInUser");
     this.googleAuthService.signout();
     this.isLoggedIn = false;
   }

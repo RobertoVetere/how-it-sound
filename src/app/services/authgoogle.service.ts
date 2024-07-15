@@ -2,15 +2,33 @@ declare var google: any;
 
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+
+//TODO: refactorizar service, añade un service para update de profile para ambos navegadores
 
 @Injectable({
   providedIn: 'root',
 })
 export class GoogleAuthService {
 
-  constructor(private router: Router) {}
-  
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private scriptLoaded = false;
+
+  constructor(private router: Router) {}
+
+  private hasToken(): boolean {
+    if (this.isBrowser()) {
+      return !!sessionStorage.getItem('loggedInUser'); 
+    }
+    return false;
+  }
+
+  
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof sessionStorage !== 'undefined';
+  }
+
 
   loadScript(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -45,13 +63,15 @@ export class GoogleAuthService {
     if(response){
       const payLoad = this.decodeToken(response.credential);
       sessionStorage.setItem("loggedInUser", JSON.stringify(payLoad));
-      this.router.navigate(['/home'])
-      
+      this.isLoggedInSubject.next(true); 
+      this.router.navigate(['/home']);
     }
   }
 
   signout(){
+    sessionStorage.removeItem('loggedInUser');
     google.accounts.id.disableAutoSelect();
-    this.router.navigate(['/login'])
+    this.isLoggedInSubject.next(false); 
+    this.router.navigate(['/login']);
   }
 }
