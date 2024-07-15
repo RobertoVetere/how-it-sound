@@ -11,8 +11,8 @@ import { IntroComponent } from './pages/intro/intro.component';
 export const routes: Routes = [
   { path: '', component: IntroComponent, pathMatch: 'full'},
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
-  { path: 'profile', component: ProfileComponent,  canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent },
-  { path: 'gallery', component: GalleryComponent,  canActivate: [AuthGuard] },
+  { path: 'gallery', component: GalleryComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'home' }
 ];
