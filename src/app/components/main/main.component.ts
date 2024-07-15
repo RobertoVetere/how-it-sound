@@ -1,26 +1,31 @@
 import { Component, ElementRef, Renderer2    } from '@angular/core';
 import { ChatService } from '../../services/chat.service'; 
 import { CommonModule } from '@angular/common';
-import { TypingService } from '../../services/typing.service';
 import { DeezerService } from '../../services/deezer.service';
 import { RouterLink } from '@angular/router';
-
+import { LoaderComponent } from '../../loader/loader.component';
+import { LoaderService } from '../../services/loader.service';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LoaderComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
 export class MainComponent {
+
 saveToGallery() {
 throw new Error('Method not implemented.');
 }
 audioPlayer: HTMLAudioElement | null = null;
-  constructor(private chatService: ChatService, private typingService: TypingService, private deezerService: DeezerService,
+  constructor(private chatService: ChatService, private loaderService: LoaderService, private deezerService: DeezerService,
     private renderer: Renderer2,
-    private elementRef: ElementRef) {}
+    private elementRef: ElementRef) {
+      this.loaderService.loading$.subscribe((loading) => {
+      this.loading = loading;
+    });
+    }
 
   imageSrc: string = 'djs.jpg';
   selectedFile: File | null = null;
@@ -31,6 +36,8 @@ audioPlayer: HTMLAudioElement | null = null;
   songLink: string = '';
   apiKey: string = '';
   colors: string[] = [];
+  loading: boolean = false;
+  
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -57,6 +64,8 @@ audioPlayer: HTMLAudioElement | null = null;
       alert('Añade tu clave Api de OpenAi');
     }
 
+    this.loaderService.show();
+
     try {
       const objectResult = await this.chatService.analyzeTextWithImage(this.selectedFile);
       this.songTitle = objectResult.title;
@@ -67,7 +76,11 @@ audioPlayer: HTMLAudioElement | null = null;
       this.applyGradientBackground(); // Aplicar fondo gradiente después de cargar los colores
     } catch (error) {
       console.error('Error al analizar la imagen:', error);
+    }finally {
+      // Ocultar loader después de completar la operación
+      this.loaderService.hide();
     }
+
   }
 
   uploadImage(){
@@ -101,6 +114,7 @@ audioPlayer: HTMLAudioElement | null = null;
       },
       (error) => {
         console.error('Error al buscar canción en Deezer:', error.message);
+        this.loaderService.hide();
       }
     );
   }

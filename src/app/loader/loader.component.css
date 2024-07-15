@@ -1,0 +1,19 @@
+.custom-loader {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.custom-loader img {
+  width: 100px; /* Ajusta el tamaño según sea necesario */
+  height: 100px; /* Ajusta el tamaño según sea necesario */
+  animation: spin 1s infinite linear; /* Aplica la animación 'spin' de forma infinita */
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg); /* Rotación completa de 360 grados */
+  }
+}
