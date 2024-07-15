@@ -86,6 +86,6 @@ export class GoogleAuthService implements OnInit {
       console.warn('Google API or necessary components are not available.');
     }
     this.isLoggedInSubject.next(false); 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }
