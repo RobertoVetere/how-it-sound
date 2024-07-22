@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     if (typeof document !== 'undefined') {
       this.googleAuthService.loadScript().then(() => {
         google.accounts.id.initialize({
-          client_id: '21471103229-0m0fh9fa3ni7r31oo2ura8dckf7oqt2e.apps.googleusercontent.com',
+          client_id: '21471103229-hcciei33mbnrn740ovslo3ksgvr69m94.apps.googleusercontent.com',
           callback: (resp: any) => this.googleAuthService.handleLogin(resp) 
         });
         google.accounts.id.renderButton(document.getElementById('gmail-btn'), {
