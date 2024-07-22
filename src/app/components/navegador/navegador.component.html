@@ -41,20 +41,29 @@
         >
           <!-- Opciones del Menú -->
           <a
+            [routerLink]="['/home']"
+            routerLinkActive="router-link-active"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+            role="menuitem"
+          >
+            Inicio
+          </a>
+          <a
             [routerLink]="['/profile']"
             routerLinkActive="router-link-active"
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
             role="menuitem"
           >
-            Profile
+            Clave API
           </a>
+
           <a
             (click)="handleSignout()"
             routerLinkActive="router-link-active"
             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors duration-200"
             role="menuitem"
           >
-            Sign Out
+            Cerrar Sesión
           </a>
         </div>
       </div>

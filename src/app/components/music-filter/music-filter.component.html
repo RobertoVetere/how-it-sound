@@ -1,0 +1,16 @@
+<div
+  class="desplegable-filter max-w-2xl px-5 xl:px-0"
+  [class.show]="isFilterVisible"
+>
+  <label for="musicStyle">Estilo de música:</label>
+  <select
+    id="musicStyle"
+    ngModel="selectedStyle"
+    (change)="handleSelection($event)"
+    class="form-control"
+  >
+    <option *ngFor="let style of musicStyles" [value]="style">
+      {{ style }}
+    </option>
+  </select>
+</div>

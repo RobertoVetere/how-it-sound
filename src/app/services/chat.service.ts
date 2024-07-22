@@ -9,8 +9,13 @@ import { z } from 'zod';
 export class ChatService {
 
   storedApiKey: string = '';
+  selectedStyle: string = 'Pop'; 
 
   constructor() { }
+
+  updateSelectedOption(style: string) {
+    this.selectedStyle = style; // Actualiza la variable del servicio con el valor recibido
+  }
 
   async analyzeTextWithImage(imageFile: File) {
   try {
@@ -35,22 +40,23 @@ export class ChatService {
     // Definir el prompt que se enviará al modelo
 const prompt = `
   Eres un experto en música, fotografía y literatura:
-  dame el título de una canción que describa esta imagen (solo el título, SIN EL AUTOR!)
-  y una poesía breve o texto breve de algún escritor que se ajuste a la imagen.
-
-  Además, por favor genera una paleta de colores que combine bien con la imagen.
+  1. Dame el título de una canción que describa esta imagen (solo el título, SIN EL AUTOR!).
+  2. Dame una poesía breve o texto breve de algún escritor que se ajuste a la imagen.
+  3. Genera una paleta de colores que combine bien con la imagen.
+  4. Dame el autor de la canción.
 `;
     // Definir el esquema esperado de la respuesta
     const schema = z.object({
       title: z.string(),
       description: z.string(),
-      colors: z.array(z.string()).length(4)
+      colors: z.array(z.string()).length(4),
+      authorSong: z.string()
     });
 
     // Generar el objeto basado en el prompt y el esquema
     const result = await generateObject({
       model,
-      temperature: 0.7,
+      temperature: 1,
       mode: 'json',
       schema,
       messages: [
@@ -66,6 +72,8 @@ const prompt = `
 
     // Log y retornar el resultado
     console.log(result.object);
+    console.log(this.selectedStyle)
+    console.log(prompt)
     return result.object;
 
   } catch (error) {

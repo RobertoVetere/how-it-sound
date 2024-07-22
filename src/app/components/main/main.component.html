@@ -41,6 +41,7 @@
             </svg>
             <span>Sube una foto</span>
           </button>
+
           <a [routerLink]="['/gallery']" routerLinkActive="router-link-active">
             <button
               class="btn-hover inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-4 py-2 space-x-2 rounded-full border border-primary transition-colors hover:bg-black hover:text-white"
@@ -78,6 +79,7 @@
         >
           <span class="text-muted-foreground font-semibold">Ver Resultado</span>
         </button>
+
         <div
           class="border bg-card text-card-foreground shadow-sm flex aspect-square items-center justify-center overflow-hidden rounded-2xl"
         >
@@ -117,7 +119,9 @@
       </div>
       <!-- Sección de información de la canción -->
       <div class="p-8 flex flex-col justify-center sm:text-sm md:text-base">
-        <h2 class="text-2xl font-bold text-center mb-4">{{ songTitle }}</h2>
+        <h2 class="text-2xl font-bold text-center mb-4">
+          {{ songTitle + " - " + songAuthor }}
+        </h2>
         <p class="text-gray-700 text-center mb-6">{{ songDescription }}</p>
         <div class="flex justify-center">
           <audio controls id="audioPlayer" class="w-full">
@@ -167,6 +171,6 @@
     </div>
   </div>
 </div>
-<div *ngIf="loading">
+<div *ngIf="loading ">
   <app-loader></app-loader>
 </div>

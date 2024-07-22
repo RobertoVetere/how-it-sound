@@ -13,6 +13,7 @@ export class GoogleAuthService implements OnInit {
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private scriptLoaded = false;
   private google: any;
+ 
 
   constructor(private router: Router) {}
 
@@ -28,6 +29,8 @@ export class GoogleAuthService implements OnInit {
       console.error('Error loading Google API:', error);
     });
   }
+
+  
 
   private hasToken(): boolean {
     if (this.isBrowser()) {
