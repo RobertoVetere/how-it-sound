@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Renderer2    } from '@angular/core';
 import { ChatService } from '../../services/chat.service'; 
 import { CommonModule } from '@angular/common';
 import { DeezerService } from '../../services/deezer.service';
@@ -6,6 +6,8 @@ import { RouterLink } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { LoaderService } from '../../services/loader.service';
 import { MusicFilterComponent } from '../music-filter/music-filter.component';
+import { NgZone } from '@angular/core';
+
 
 @Component({
   selector: 'app-main',
@@ -15,33 +17,31 @@ import { MusicFilterComponent } from '../music-filter/music-filter.component';
   styleUrl: './main.component.css'
 })
 export class MainComponent {
+
 saveToGallery() {
 throw new Error('Method not implemented.');
 }
-
-  audioPlayer: HTMLAudioElement | null = null;
-
-  constructor(
-    private chatService: ChatService, 
-    private loaderService: LoaderService, 
-    private deezerService: DeezerService,
+audioPlayer: HTMLAudioElement | null = null;
+  constructor(private chatService: ChatService, private loaderService: LoaderService, private deezerService: DeezerService,
     private renderer: Renderer2,
-    private elementRef: ElementRef
-  ) {
-    this.loaderService.loading$.subscribe((loading) => {
+    private elementRef: ElementRef, private ngZone: NgZone ) {
+      this.loaderService.loading$.subscribe((loading) => {
       this.loading = loading;
     });
-  }
+    }
 
   imageSrc: string = 'djs.jpg';
   selectedFile: File | null = null;
+  objectResult: Object | undefined;
   songTitle: string = '';
   songDescription: string = '';
   songAuthor: string = '';
   songInfo: boolean = false;
   songLink: string = '';
+  apiKey: string = '';
   colors: string[] = [];
   loading: boolean = false;
+  
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -58,44 +58,45 @@ throw new Error('Method not implemented.');
   triggerFileInput(fileInput: HTMLInputElement) {
     fileInput.click();
   }
-
+  
   async showHowItSound() {
     if (!this.selectedFile) {
       alert('Debe seleccionar una imagen.');
       return;
     }
-    if (!localStorage.getItem('apiKey')) {
-      alert('Añade tu clave API de OpenAI');
-      return;
+    if(!localStorage.getItem('apiKey')){
+      alert('Añade tu clave Api de OpenAi');
     }
 
     this.loaderService.show();
 
-    try {
-      if (this.selectedFile) {
-        const objectResult = await this.chatService.analyzeTextWithImage(this.selectedFile);
-        this.songTitle = objectResult.title ?? ''; 
-        this.songDescription = objectResult.description ?? ''; 
-        this.colors = objectResult.colors ?? []; 
-        this.songAuthor = objectResult.authorSong ?? ''; 
-        await this.searchSong(this.songAuthor, this.songTitle);
-        this.songInfo = true;
-        this.applyGradientBackground(); // Aplicar fondo gradiente después de cargar los colores
+   this.ngZone.run(() => {
+    setTimeout(async () => {
+      try {
+        if (this.selectedFile) {
+          const objectResult = await this.chatService.analyzeTextWithImage(this.selectedFile);
+          this.songTitle = objectResult.title;
+          this.songDescription = objectResult.description;
+          this.colors = objectResult.colors;
+          this.songAuthor = objectResult.authorSong;
+          this.searchSong(this.songAuthor, this.songTitle);
+          this.songInfo = true;
+          this.applyGradientBackground(); // Aplicar fondo gradiente después de cargar los colores
+        }
+      } catch (error) {
+        console.error('Error al analizar la imagen:', error);
+      } finally {
+        // Ocultar loader después de completar la operación
+        this.loaderService.hide();
       }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Error al analizar la imagen:', error.message);
-      } else {
-        console.error('Error desconocido:', error);
-      }
-    } finally {
-      // Ocultar loader después de completar la operación
-      this.loaderService.hide();
-    }
+    }, 0); // Retraso de 0 ms para asegurar la actualización del DOM
+  });
+
   }
 
-  uploadImage() {
-    alert("Imagen subida");
+  uploadImage(){
+    alert("imagen subida")
+    
   }
 
   closeModal() {
@@ -103,51 +104,37 @@ throw new Error('Method not implemented.');
     document.querySelector('main')?.classList.remove('bg-gradient-animation');
   }
 
-  private async searchSong(songAuthor: string, songTitle: string): Promise<void> {
-    try {
-      const link = await this.deezerService.findSongOnDeezer(songAuthor, songTitle).toPromise();
-      if (link) {
-        this.songLink = link;
-        this.playAudio(); // Solo llama a playAudio si link es válido
-      } else {
-        console.error('No se encontró enlace para la canción');
-        this.songLink = ''; // Asegura que songLink sea un string
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
+  searchSong(songAuthor: string ,songTitle: string) {
+    this.deezerService.findSongOnDeezer(songAuthor,songTitle).subscribe(
+      (link: string) => {
+        console.log(link)
+        this.songLink = link; // Asigna el enlace de la canción a la variable 'songLink'
+        this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
+       
+        if ( this.audioPlayer) {
+          this.audioPlayer.load(); // Cargar la nueva fuente de audio
+          this.audioPlayer.loop = true;
+          this.audioPlayer.volume = 0.5;
+          this.audioPlayer.play(); // Comenzar la reproducción
+          this.audioPlayer.addEventListener('pause', () => {
+            document.querySelector('main')?.classList.remove('bg-gradient-animation');
+          });
+          this.audioPlayer.addEventListener('play', () => {
+            document.querySelector('main')?.classList.add('bg-gradient-animation');
+          });
+        }
+      },
+      (error) => {
         console.error('Error al buscar canción en Deezer:', error.message);
-      } else {
-        console.error('Error desconocido al buscar canción:', error);
+        this.loaderService.hide();
       }
-      this.songLink = ''; // Asegura que songLink sea un string
-      this.loaderService.hide();
-    }
+    );
   }
-
-  private playAudio() {
-    this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
-
-    if (this.audioPlayer && this.songLink) { 
-      this.audioPlayer.src = this.songLink;
-      this.audioPlayer.load();
-      this.audioPlayer.loop = true;
-      this.audioPlayer.volume = 0.5;
-      this.audioPlayer.play();
-      this.audioPlayer.addEventListener('pause', () => {
-        this.removeGradientBackground();
-      });
-      this.audioPlayer.addEventListener('play', () => {
-        this.applyGradientBackground();
-      });
-    } else {
-      console.error('Reproductor de audio no disponible o enlace de canción no definido');
-    }
-  }
-
-  private applyGradientBackground() {
+private applyGradientBackground() {
     const gradient = `linear-gradient(-45deg, ${this.colors.join(', ')})`;
-    document.querySelector('main')?.style.setProperty('background', gradient);
+    document.querySelector('main')?.style, 'background', gradient;
     document.querySelector('main')?.classList.add('bg-gradient-animation');
+    
   }
 
   private removeGradientBackground() {
