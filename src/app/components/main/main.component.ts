@@ -7,6 +7,8 @@ import { LoaderComponent } from '../loader/loader.component';
 import { LoaderService } from '../../services/loader.service';
 import { MusicFilterComponent } from '../music-filter/music-filter.component';
 import { NgZone } from '@angular/core';
+import { ImageData } from '../../models/image.data';
+import { SongData } from '../../models/song.data';
 
 
 @Component({
@@ -29,27 +31,22 @@ audioPlayer: HTMLAudioElement | null = null;
       this.loading = loading;
     });
     }
-
-  imageSrc: string = 'djs.jpg';
-  selectedFile: File | null = null;
+  imageData: ImageData = { src: 'djs.jpg', file: null };
+  songData: SongData = { title: '', author: '', description: '', link: '', colors: [] };
   objectResult: Object | undefined;
-  songTitle: string = '';
-  songDescription: string = '';
-  songAuthor: string = '';
   songInfo: boolean = false;
-  songLink: string = '';
   apiKey: string = '';
   colors: string[] = [];
   loading: boolean = false;
   
 
-  onFileSelected(event: any) {
+   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.selectedFile = file; // Almacenar el archivo seleccionado
+      this.imageData.file = file;
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.imageSrc = e.target.result;
+        this.imageData.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
@@ -60,7 +57,7 @@ audioPlayer: HTMLAudioElement | null = null;
   }
   
   async showHowItSound() {
-    if (!this.selectedFile) {
+    if (!this.imageData.file) {
       alert('Debe seleccionar una imagen.');
       return;
     }
@@ -73,16 +70,19 @@ audioPlayer: HTMLAudioElement | null = null;
    this.ngZone.run(() => {
     setTimeout(async () => {
       try {
-        if (this.selectedFile) {
-          const objectResult = await this.chatService.analyzeTextWithImage(this.selectedFile);
-          this.songTitle = objectResult.title;
-          this.songDescription = objectResult.description;
-          this.colors = objectResult.colors;
-          this.songAuthor = objectResult.authorSong;
-          this.searchSong(this.songAuthor, this.songTitle);
-          this.songInfo = true;
-          this.applyGradientBackground(); // Aplicar fondo gradiente después de cargar los colores
-        }
+        if (this.imageData.file) {
+            const result = await this.chatService.analyzeTextWithImage(this.imageData.file);
+            this.songData = {
+              title: result.title,
+              author: result.authorSong,
+              description: result.description,
+              link: '',
+              colors: result.colors
+            };
+            this.searchSong(this.songData.author, this.songData.title);
+            this.songInfo = true;
+            this.applyGradientBackground();
+          }
       } catch (error) {
         console.error('Error al analizar la imagen:', error);
       } finally {
@@ -108,7 +108,7 @@ audioPlayer: HTMLAudioElement | null = null;
     this.deezerService.findSongOnDeezer(songAuthor,songTitle).subscribe(
       (link: string) => {
         console.log(link)
-        this.songLink = link; // Asigna el enlace de la canción a la variable 'songLink'
+        this.songData.link = link; // Asigna el enlace de la canción a la variable 'songLink'
         this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
        
         if ( this.audioPlayer) {

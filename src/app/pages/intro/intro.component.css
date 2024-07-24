@@ -4,7 +4,7 @@
   }
   100% {
     transform: translateX(
-      calc(-350px * 14)
+      calc(-24rem * 14)
     ); /* Ajusta según la cantidad de duplicados */
   }
 }
@@ -12,18 +12,21 @@
 .slider {
   height: 100%;
   margin: auto;
-  overflow: hidden;
+  overflow: hidden !important;
   position: relative;
   width: 100%;
 }
 
 .slide-track {
   display: flex;
-  width: calc(350px * 28); /* Ajusta según la cantidad de duplicados */
-  animation: scroll 60s linear infinite;
+  width: calc(24rem * 28); /* Ajusta según la cantidad de duplicados */
   &:hover {
     animation-play-state: paused;
   }
+}
+
+.animate-scroll {
+  animation: scroll 40s linear infinite;
 }
 
 .slide {
@@ -31,4 +34,78 @@
   width: 350px;
 }
 
+/* Estilo para el contenedor de la imagen */
+.relative {
+  position: relative;
+}
 
+.transition-transform {
+  transition: transform 0.3s;
+}
+
+.transform {
+  transform: scale(1);
+}
+
+/* Estilo para la animación de la imagen en hover */
+.transform:hover {
+  transform: scale(1.1);
+}
+
+/* Estilo para el botón */
+.info-button {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: #e73c7e;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 10%;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: scale(0.8);
+}
+
+.info-button:hover {
+  transform: scale(1.5);
+}
+
+.relative:hover .info-button {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modal-open .slide {
+  pointer-events: none;
+}
+
+.modal-open .slide-track {
+  animation-play-state: running;
+}
+/* Define la animación de fondo */
+.bg-gradient-animation {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 2s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hideBtn {
+  display: none;
+}
+
+.photoThanks {
+  position: absolute;
+  bottom: 0;
+}
