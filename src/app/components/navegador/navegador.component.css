@@ -1,9 +1,10 @@
 .gradient-text-animation {
-  background: linear-gradient(-35deg, #dc2626, #e73c7e, #0ea5e9, #6b21a8);
+  background: linear-gradient(-55deg, #dc2626, #e73c7e, #0ea5e9, #6b21a8);
+  background-size: 200% 200%; /* Increase the background size */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient 6s ease infinite;
+  animation: gradient 4s ease infinite;
   display: inline-block; /* Necesario para aplicar background-clip correctamente */
 }
 

@@ -9,12 +9,26 @@ import { CommonModule } from '@angular/common';
   styleUrl: './modal.component.css'
 })
 export class ModalComponent {
+  @Input() isVisible: boolean = false;
+  @Input() title: string = 'Default Title';
+  @Input() message: string = 'Default Message';
+  @Input() modalType: 'text' | 'image' | 'apiKey' = 'text';
+  @Output() closeModal = new EventEmitter<void>();
+  @Output() confirmModal = new EventEmitter<string | void>();
 
-   @Input() isVisible = false;
-  @Output() close = new EventEmitter<void>();
+  inputApiKey: string = '';
 
-  closeModal() {
-    this.close.emit();
+  close() {
+    this.isVisible = false;
+    this.closeModal.emit();
   }
 
+  confirm() {
+    if (this.modalType === 'apiKey') {
+      this.confirmModal.emit(this.inputApiKey);
+    } else {
+      this.confirmModal.emit();
+    }
+    this.isVisible = false;
+  }
 }
