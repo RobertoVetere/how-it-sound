@@ -21,6 +21,8 @@ export class NavegadorComponent implements OnInit, OnDestroy {
   isUserMenuOpen = false;
   private routerSubscription: Subscription | undefined;
   profileImage: string = '';
+fullName: any;
+email: any;
 
   constructor(private router: Router, private googleAuthService: GoogleAuthService) {}
 
@@ -48,6 +50,8 @@ export class NavegadorComponent implements OnInit, OnDestroy {
       const user = JSON.parse(loggedInUser);
       this.profileImage = user.picture ?? ''; // Usa '??' para establecer un valor por defecto si user.picture es null o undefined
       this.username = user.name ? user.name.split(' ')[0] : '';
+      this.fullName = user.name;
+      this.email = user.email;
     } else {
       this.profileImage = ''; // Otra lógica de imagen por defecto si no hay usuario logueado
       this.username = '';
