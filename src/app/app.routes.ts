@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
@@ -7,6 +6,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './auth.guard';
 import { IntroComponent } from './pages/intro/intro.component';
+import { Routes, RouterModule, provideRouter, withPreloading, PreloadAllModules  } from '@angular/router';
+
+
 
 export const routes: Routes = [
   { path: '', component: IntroComponent, pathMatch: 'full'},
