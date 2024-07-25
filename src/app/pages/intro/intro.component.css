@@ -109,3 +109,10 @@
   position: absolute;
   bottom: 0;
 }
+
+@media (max-width: 640px) {
+  .slide {
+    height: 100%;
+    width: 200px;
+  }
+}
