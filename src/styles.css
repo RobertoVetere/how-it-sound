@@ -12,4 +12,6 @@ body {
 body {
   margin: 0;
   font-family: "Exo 2", sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #ffeefc);
 }
+

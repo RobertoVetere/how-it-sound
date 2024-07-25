@@ -102,7 +102,7 @@
 }
 
 .hideBtn {
-  display: none;
+  visibility: hidden;
 }
 
 .photoThanks {

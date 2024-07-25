@@ -23,3 +23,8 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.nav-container {
+  background-color: transparent;
+  border: none;
+}
