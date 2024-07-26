@@ -72,7 +72,7 @@ throw new Error('Method not implemented.');
     fileInput.click();
   }
 
-  async showHowItSound() {
+   showHowItSound() {
     if (!this.imageNotComp.file) {
       alert('Debe seleccionar una imagen.');
       return;
@@ -84,7 +84,7 @@ throw new Error('Method not implemented.');
 
     this.loaderService.show();
     try {
-      await this.analizeImage();
+       this.analizeImage();
     } catch (error) {
       console.error('Error al analizar la imagen:', error);
     } finally {
@@ -112,7 +112,7 @@ throw new Error('Method not implemented.');
           this.audioPlayer.load(); // Cargar la nueva fuente de audio
           this.audioPlayer.loop = true;
           this.audioPlayer.volume = 0.5;
-          //this.audioPlayer.play(); // Comenzar la reproducción
+          this.audioPlayer.play(); // Comenzar la reproducción
           this.audioPlayer.addEventListener('pause', () => {
             document.querySelector('main')?.classList.remove('bg-gradient-animation');
           });
