@@ -8,6 +8,8 @@ import { LoaderService } from '../../services/loader.service';
 import { MusicFilterComponent } from '../music-filter/music-filter.component';
 import { ImageData } from '../../models/image.data';
 import { SongData } from '../../models/song.data';
+import imageCompression from 'browser-image-compression';
+
 
 @Component({
   selector: 'app-main',
@@ -31,6 +33,7 @@ throw new Error('Method not implemented.');
   }
   
   imageData: ImageData = { src: 'djs.jpg', file: null };
+  imageNotComp: ImageData = { src: 'djs.jpg', file: null };
   songData: SongData = { title: '', author: '', description: '', link: '', colors: [] };
   objectResult: Object | undefined;
   songInfo: boolean = false;
@@ -39,15 +42,29 @@ throw new Error('Method not implemented.');
   loading: boolean = false;
   apiCallsLeft: number = 3;
 
-  onFileSelected(event: any) {
+  async onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.imageData.file = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imageData.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+      try {
+        const options = {
+          maxSizeMB: 2, // Aumentar el tamaño máximo en MB
+          maxWidthOrHeight: 1000, // Aumentar el ancho o altura máxima
+          useWebWorker: true, // Usar Web Worker para mejorar el rendimiento
+          initialQuality: 0.85 // Calidad inicial (de 0 a 1)
+        };
+        
+        this.imageNotComp.file = file;
+        const compressedFile = await imageCompression(file, options);
+        this.imageData.file = compressedFile;
+
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.imageData.src = e.target.result;
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+      }
     }
   }
 
@@ -56,7 +73,7 @@ throw new Error('Method not implemented.');
   }
 
   async showHowItSound() {
-    if (!this.imageData.file) {
+    if (!this.imageNotComp.file) {
       alert('Debe seleccionar una imagen.');
       return;
     }
