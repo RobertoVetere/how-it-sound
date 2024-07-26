@@ -125,7 +125,7 @@ throw new Error('Method not implemented.');
         this.applyGradientBackground();
       },
       error: (error) => {
-      this.songInfo = false;
+      //this.songInfo = false;
         console.error('Error al buscar canción en Deezer:', error.message);
         this.clearAudioPlayer();
         //if(this.apiCallsLeft > 0){
