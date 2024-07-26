@@ -127,6 +127,7 @@ throw new Error('Method not implemented.');
       error: (error) => {
       //this.songInfo = false;
         console.error('Error al buscar canción en Deezer:', error.message);
+        alert(error.message);
         this.clearAudioPlayer();
         //if(this.apiCallsLeft > 0){
           //this.analizeImage();
