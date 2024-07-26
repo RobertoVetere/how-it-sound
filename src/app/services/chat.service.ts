@@ -35,7 +35,7 @@ export class ChatService {
     });
 
     // Seleccionar el modelo adecuado
-    const model = openai('gpt-4o');
+    const model = openai('gpt-4o-mini');
 
     // Definir el prompt que se enviará al modelo
 const prompt = `

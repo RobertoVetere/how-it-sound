@@ -93,3 +93,39 @@ button.ml-0.btn-hover.inline-flex.items-center.justify-center.whitespace-nowrap.
   max-height: 150px; /* Ajusta esta altura según sea necesario */
   overflow-y: auto;
 }
+
+@media (max-width: 640px) {
+  .fixed.inset-0.z-50 {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .relative.z-50 {
+    margin-bottom: env(safe-area-inset-bottom);
+  }
+
+  .relative.z-50.bg-white.rounded-lg.shadow-lg.overflow-hidden.w-full.max-w-none.sm\:max-w-5xl.sm\:mx-auto {
+    max-height: 90%;
+    position: absolute;
+    top: 0;
+    margin: 10px;
+    width: 95%;
+  }
+}
+
+@media (max-width: 640px) {
+  .fixed.inset-0.z-50 {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .relative.z-50 {
+    margin-bottom: env(safe-area-inset-bottom);
+  }
+
+  .relative.z-50.bg-white.rounded-lg.shadow-lg.overflow-hidden.w-full.max-w-none.sm\:max-w-5xl.sm\:mx-auto {
+    max-height: 90%;
+    position: absolute;
+    top: 0;
+    margin: 10px;
+    width: 95%;
+  }
+}
