@@ -102,43 +102,53 @@ throw new Error('Method not implemented.');
   }
 
   searchSong(songAuthor: string, songTitle: string) {
-    this.deezerService.findSongOnDeezer(songAuthor, songTitle).subscribe({
-      next: (link: string) => {
-        console.log(link);
-        this.songData.link = link; // Asigna el enlace de la canción a la variable 'songLink'
-        this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
-        
-        if (this.audioPlayer) {
-          this.audioPlayer.load(); // Cargar la nueva fuente de audio
-          this.audioPlayer.loop = true;
-          this.audioPlayer.volume = 0.5;
-          this.audioPlayer.play(); // Comenzar la reproducción
-          this.audioPlayer.addEventListener('pause', () => {
-            document.querySelector('main')?.classList.remove('bg-gradient-animation');
-          });
-          this.audioPlayer.addEventListener('play', () => {
-            document.querySelector('main')?.classList.add('bg-gradient-animation');
-          });
-          
-        }
-        this.loaderService.hide();
-        this.applyGradientBackground();
-      },
-      error: (error) => {
-      //this.songInfo = false;
-        console.error('Error al buscar canción en Deezer:', error.message);
-        alert(error.message);
-        this.clearAudioPlayer();
-        //if(this.apiCallsLeft > 0){
-          //this.analizeImage();
-          //this.apiCallsLeft -= 1;
-          //console.log("quedan: " + this.apiCallsLeft + "intentos")
-        //}else{
-          //alert("¡Ups! Algo ha salido mal, prueba de nuevo");
-        //}
+  this.deezerService.findSongOnDeezer(songAuthor, songTitle).subscribe({
+    next: (link: string) => {
+      console.log(link);
+      this.songData.link = link; // Asigna el enlace de la canción a la variable 'songLink'
+      this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
+
+      if (this.audioPlayer) {
+        this.audioPlayer.src = this.songData.link; // Establece el enlace de la canción
+        this.audioPlayer.load(); // Carga la nueva fuente de audio
+
+        // Espera a que el audio esté listo para reproducir
+        this.audioPlayer.addEventListener('canplaythrough', () => {
+          this.audioPlayer!.loop = true;
+          this.audioPlayer!.volume = 0.5;
+          this.audioPlayer!.play(); // Comienza la reproducción
+          this.applyGradientBackground();
+        }, { once: true });
+
+        this.audioPlayer.addEventListener('pause', () => {
+          document.querySelector('main')?.classList.remove('bg-gradient-animation');
+        });
+        this.audioPlayer.addEventListener('play', () => {
+          document.querySelector('main')?.classList.add('bg-gradient-animation');
+        });
       }
-    });
-  }
+      this.loaderService.hide();
+    },
+    error: (error) => {
+      console.error('Error al buscar canción en Deezer:', error.message);
+      alert(error.message);
+      this.clearAudioPlayer();
+      
+      if (this.apiCallsLeft > 0) {
+        this.analizeImage().then(() => {
+          this.apiCallsLeft -= 1;
+          console.log("quedan: " + this.apiCallsLeft + " intentos");
+        }).catch(err => {
+          console.error('Error al analizar la imagen:', err);
+          alert("¡Ups! Algo ha salido mal, prueba de nuevo");
+        });
+      } else {
+        alert("¡Ups! Algo ha salido mal, prueba de nuevo");
+      }
+    }
+  });
+}
+
 
   private applyGradientBackground() {
     const gradient = `linear-gradient(-45deg, ${this.colors.join(', ')})`;
