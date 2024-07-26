@@ -112,7 +112,7 @@ throw new Error('Method not implemented.');
           this.audioPlayer.load(); // Cargar la nueva fuente de audio
           this.audioPlayer.loop = true;
           this.audioPlayer.volume = 0.5;
-          this.audioPlayer.play(); // Comenzar la reproducción
+          //this.audioPlayer.play(); // Comenzar la reproducción
           this.audioPlayer.addEventListener('pause', () => {
             document.querySelector('main')?.classList.remove('bg-gradient-animation');
           });
