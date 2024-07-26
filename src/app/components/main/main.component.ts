@@ -72,7 +72,7 @@ throw new Error('Method not implemented.');
     fileInput.click();
   }
 
-   showHowItSound() {
+  async showHowItSound() {
     if (!this.imageNotComp.file) {
       alert('Debe seleccionar una imagen.');
       return;
@@ -84,7 +84,7 @@ throw new Error('Method not implemented.');
 
     this.loaderService.show();
     try {
-       this.analizeImage();
+      await this.analizeImage();
     } catch (error) {
       console.error('Error al analizar la imagen:', error);
     } finally {
@@ -217,13 +217,13 @@ deezerFetchNew(songAuthor: string, songTitle: string) {
       this.songInfo = false;
         console.error('Error al buscar canción en Deezer:', error.message);
         
-        if(this.apiCallsLeft > 0){
-        this.analizeImage();
-        this.apiCallsLeft -= 1;
-        console.log("quedan: " + this.apiCallsLeft + "intentos")
-        }else{
-          alert("¡Ups! Algo ha salido mal, prueba de nuevo");
-        }
+        //if(this.apiCallsLeft > 0){
+        //this.analizeImage();
+        //this.apiCallsLeft -= 1;
+        //console.log("quedan: " + this.apiCallsLeft + "intentos")
+        //}else{
+        //  alert("¡Ups! Algo ha salido mal, prueba de nuevo");
+        //}
       }
     });
   }
