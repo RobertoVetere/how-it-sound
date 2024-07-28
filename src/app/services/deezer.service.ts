@@ -1,35 +1,17 @@
 import { Injectable } from '@angular/core';
-import axios, { AxiosResponse } from 'axios'; // Import Axios
-import { Observable, from } from 'rxjs';
-import { map, catchError } from 'rxjs/operators'; // Import map and catchError operators
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeezerService {
-  private deezerApiUrl = 'https://cors-anywhere.herokuapp.com/https://api.deezer.com/search';
+  private backendApiUrl = 'https://photosong-backend-production.up.railway.app/api/deezer/song';
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   findSongOnDeezer(artist: string, songTitle: string): Observable<string> {
-    // Construct API URL with the artist and song title
-    const apiUrl = `${this.deezerApiUrl}?q=artist:"${encodeURIComponent(artist)}" track:"${encodeURIComponent(songTitle)}"`;
-
-    return from(axios.get(apiUrl)).pipe(
-      map((response: AxiosResponse) => {
-        // Check if the response contains data
-        if (response.data && response.data.data && response.data.data.length > 0) {
-          // Extract and return the preview URL of the first song
-          return response.data.data[0].preview;
-        } else {
-          throw new Error('No song found with the given artist and title.');
-        }
-      }),
-      catchError(error => {
-        // Handle errors
-        console.error('Error fetching song:', error);
-        throw new Error('Error fetching song. Please try again later.');
-      })
-    );
+    const params = new HttpParams().set('artist', artist).set('songTitle', songTitle);
+    return this.http.get(this.backendApiUrl, { params, responseType: 'text' });
   }
 }

@@ -115,18 +115,17 @@ throw new Error('Method not implemented.');
   this.deezerService.findSongOnDeezer(songAuthor, songTitle).subscribe({
     next: (link: string) => {
       console.log(link);
-      this.songData.link = link; // Asigna el enlace de la canción a la variable 'songLink'
+      this.songData.link = link;
       this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
 
       if (this.audioPlayer) {
-        this.audioPlayer.src = this.songData.link; // Establece el enlace de la canción
-        this.audioPlayer.load(); // Carga la nueva fuente de audio
+        this.audioPlayer.src = this.songData.link;
+        this.audioPlayer.load();
 
-        // Espera a que el audio esté listo para reproducir
         this.audioPlayer.addEventListener('canplaythrough', () => {
           this.audioPlayer!.loop = true;
           this.audioPlayer!.volume = 0.5;
-          this.audioPlayer!.play(); // Comienza la reproducción
+          this.audioPlayer!.play();
           this.applyGradientBackground();
         }, { once: true });
 
