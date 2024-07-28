@@ -63,10 +63,6 @@ throw new Error('Method not implemented.');
   }
 
    private async processImage(file: File) {
-    // Cargar imagen no comprimida
-    this.imageNotComp.file = file;
-    this.imageNotComp.src = await this.readFileAsDataURL(file);
-
     // Comprimir imagen
     const options = {
       maxSizeMB: 0.1,
@@ -77,6 +73,9 @@ throw new Error('Method not implemented.');
     const compressedFile = await imageCompression(file, options);
     this.imageData.file = compressedFile;
     this.imageData.src = await this.readFileAsDataURL(compressedFile);
+    // Cargar imagen no comprimida
+    this.imageNotComp.file = file;
+    this.imageNotComp.src = await this.readFileAsDataURL(file);
   }
 
 
