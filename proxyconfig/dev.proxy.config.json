@@ -1,0 +1,9 @@
+
+
+{
+    "/**":{
+        "target": "https://api.deezer.com/",
+        "secur":true,
+        "changeOrigin": true
+    }
+}
