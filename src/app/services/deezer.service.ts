@@ -8,6 +8,7 @@ import { map, catchError } from 'rxjs/operators'; // Import map and catchError o
 })
 export class DeezerService {
   private deezerApiUrl = 'https://api.deezer.com/search';
+  private corsProxyUrl = 'https://cors-anywhere.herokuapp.com/'; // URL del proxy CORS
 
   constructor() { }
 
@@ -15,7 +16,10 @@ export class DeezerService {
     // Construct API URL with the artist and song title
     const apiUrl = `${this.deezerApiUrl}?q=artist:"${encodeURIComponent(artist)}" track:"${encodeURIComponent(songTitle)}"`;
 
-    return from(axios.get(apiUrl)).pipe(
+    // Use the CORS proxy URL
+    const proxyUrl = `${this.corsProxyUrl}${apiUrl}`;
+
+    return from(axios.get(proxyUrl)).pipe(
       map((response: AxiosResponse) => {
         // Check if the response contains data
         if (response.data && response.data.data && response.data.data.length > 0) {
