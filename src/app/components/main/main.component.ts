@@ -19,6 +19,7 @@ import imageCompression from 'browser-image-compression';
   styleUrl: './main.component.css'
 })
 export class MainComponent {
+
 saveToGallery() {
 throw new Error('Method not implemented.');
 }
@@ -41,40 +42,52 @@ throw new Error('Method not implemented.');
   colors: string[] = [];
   loading: boolean = false;
   apiCallsLeft: number = 3;
+  isLoading = false;
 
  async onFileSelected(event: any) {
-  const file: File = event.target.files[0];
-  if (file) {
-    try {
-      const options = {
-        maxSizeMB: 0.1, // Reducir el tamaño máximo en MB para comprimir más
-        maxWidthOrHeight: 800, // Reducir el ancho o altura máxima
-        useWebWorker: true, // Usar Web Worker para mejorar el rendimiento
-        initialQuality: 0.5 // Reducir la calidad inicial (de 0 a 1) para comprimir más
-      };
+    const file: File = event.target.files[0];
+    if (file) {
+      this.isLoading = true; // Mostrar placeholder mientras se carga la imagen
 
-      // Cargar imagen no comprimida
-      this.imageNotComp.file = file;
-      const readerNotComp = new FileReader();
-      readerNotComp.onload = (e: any) => {
-        this.imageNotComp.src = e.target.result;
-      };
-      readerNotComp.readAsDataURL(file);
+      try {
+        // Cargar y procesar la imagen
+        await this.processImage(file);
 
-      // Comprimir imagen
-      const compressedFile = await imageCompression(file, options);
-      this.imageData.file = compressedFile;
-      const readerComp = new FileReader();
-      readerComp.onload = (e: any) => {
-        this.imageData.src = e.target.result;
-      };
-      readerComp.readAsDataURL(compressedFile);
-    } catch (error) {
-      console.error('Error compressing image:', error);
+        // Una vez procesada la imagen, se actualizará el estado para mostrarla
+        this.isLoading = false;
+      } catch (error) {
+        console.error('Error processing image:', error);
+        this.isLoading = false; // Ocultar placeholder en caso de error
+      }
     }
   }
-}
 
+   private async processImage(file: File) {
+    // Cargar imagen no comprimida
+    this.imageNotComp.file = file;
+    this.imageNotComp.src = await this.readFileAsDataURL(file);
+
+    // Comprimir imagen
+    const options = {
+      maxSizeMB: 0.1,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+      initialQuality: 0.5
+    };
+    const compressedFile = await imageCompression(file, options);
+    this.imageData.file = compressedFile;
+    this.imageData.src = await this.readFileAsDataURL(compressedFile);
+  }
+
+
+private readFileAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => resolve(e.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
 
 
 
@@ -95,7 +108,6 @@ throw new Error('Method not implemented.');
     
     try {
       await this.analizeImage();
-      this.songInfo = true;
       
     } catch (error) {
       console.error('Error al analizar la imagen:', error);
@@ -138,6 +150,7 @@ throw new Error('Method not implemented.');
           document.querySelector('main')?.classList.add('bg-gradient-animation');
         });
       }
+      this.songInfo = true;
       this.loaderService.hide();
     },
     error: (error) => {
@@ -154,6 +167,7 @@ throw new Error('Method not implemented.');
         });
       } else {
         alert("¡Ups! Algo ha salido mal, prueba de nuevo");
+        this.loaderService.hide();
       }
     }
   });
