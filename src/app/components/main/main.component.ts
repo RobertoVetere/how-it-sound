@@ -42,31 +42,41 @@ throw new Error('Method not implemented.');
   loading: boolean = false;
   apiCallsLeft: number = 3;
 
-  async onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      try {
-        const options = {
-          maxSizeMB: 2, // Aumentar el tamaño máximo en MB
-          maxWidthOrHeight: 1000, // Aumentar el ancho o altura máxima
-          useWebWorker: true, // Usar Web Worker para mejorar el rendimiento
-          initialQuality: 0.85 // Calidad inicial (de 0 a 1)
-        };
-        
-        this.imageNotComp.file = file;
-        const compressedFile = await imageCompression(file, options);
-        this.imageData.file = compressedFile;
+ async onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+  if (file) {
+    try {
+      const options = {
+        maxSizeMB: 0.1, // Reducir el tamaño máximo en MB para comprimir más
+        maxWidthOrHeight: 800, // Reducir el ancho o altura máxima
+        useWebWorker: true, // Usar Web Worker para mejorar el rendimiento
+        initialQuality: 0.5 // Reducir la calidad inicial (de 0 a 1) para comprimir más
+      };
 
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          this.imageData.src = e.target.result;
-        };
-        reader.readAsDataURL(compressedFile);
-      } catch (error) {
-        console.error('Error compressing image:', error);
-      }
+      // Cargar imagen no comprimida
+      this.imageNotComp.file = file;
+      const readerNotComp = new FileReader();
+      readerNotComp.onload = (e: any) => {
+        this.imageNotComp.src = e.target.result;
+      };
+      readerNotComp.readAsDataURL(file);
+
+      // Comprimir imagen
+      const compressedFile = await imageCompression(file, options);
+      this.imageData.file = compressedFile;
+      const readerComp = new FileReader();
+      readerComp.onload = (e: any) => {
+        this.imageData.src = e.target.result;
+      };
+      readerComp.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.error('Error compressing image:', error);
     }
   }
+}
+
+
+
 
   triggerFileInput(fileInput: HTMLInputElement) {
     fileInput.click();
@@ -197,76 +207,7 @@ throw new Error('Method not implemented.');
   }
 
 
-
-  async analizeImageNew(){
-  if (!this.imageData.file) {
-      throw new Error('No image file selected');
-    }
-    const result = this.chatService.analyzeTextWithImage(this.imageData.file);
-
-    try {
-      const result = await this.chatService.analyzeTextWithImage(this.imageData.file);
-      this.songData = {
-        title: result.title,
-        author: result.authorSong,
-        description: result.description,
-        link: '',
-        colors: result.colors
-      };
-    } catch (error) {
-      console.error('Error al analizar la imagen:', error);
-      throw error; // Vuelve a lanzar el error para que sea manejado en showHowItSound
-    }
-  }
-
-deezerFetchNew(songAuthor: string, songTitle: string) {
-    this.deezerService.findSongOnDeezer(songAuthor, songTitle).subscribe({
-      next: (link: string) => {
-        console.log(link);
-        this.songData.link = link; // Asigna el enlace de la canción a la variable 'songLink'
-      },
-      error: (error) => {
-      this.songInfo = false;
-        console.error('Error al buscar canción en Deezer:', error.message);
-        
-        //if(this.apiCallsLeft > 0){
-        //this.analizeImage();
-        //this.apiCallsLeft -= 1;
-        //console.log("quedan: " + this.apiCallsLeft + "intentos")
-        //}else{
-        //  alert("¡Ups! Algo ha salido mal, prueba de nuevo");
-        //}
-      }
-    });
-  }
-
-  createAudioPlayer(){
-    this.clearAudioPlayer();
-      this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
-            
-            if (this.audioPlayer) {
-              this.audioPlayer.load(); // Cargar la nueva fuente de audio
-              this.audioPlayer.loop = true;
-              this.audioPlayer.volume = 0.5;
-              //this.audioPlayer.play(); // Comenzar la reproducción
-              this.audioPlayer.addEventListener('pause', () => {
-                document.querySelector('main')?.classList.remove('bg-gradient-animation');
-              });
-              this.audioPlayer.addEventListener('play', () => {
-                document.querySelector('main')?.classList.add('bg-gradient-animation');
-              });
-              
-            }
-            this.loaderService.hide();
-            this.applyGradientBackground();
-  }
-
-  createView(){
-      this.analizeImageNew();
-      this.deezerFetchNew(this.songData.author, this.songData.title);
-      this.createAudioPlayer();
-      this.songInfo = true;
-  }
+  
 }
 
 

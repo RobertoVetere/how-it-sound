@@ -1,12 +1,10 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
-import { AppComponent } from './app.component';
+// src/app/app.routes.ts
+
 import { Routes } from '@angular/router';
 import { IntroComponent } from './pages/intro/intro.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuard } from './auth.guard';
 
-// Define las rutas
 const routes: Routes = [
   { path: '', component: IntroComponent, pathMatch: 'full' },
   {
@@ -28,13 +26,4 @@ const routes: Routes = [
   { path: '**', redirectTo: 'home' }
 ];
 
-// Configura el proveedor de rutas
-const appConfig = {
-  providers: [
-    provideRouter(routes)
-  ]
-};
-
-// Inicia la aplicación
-bootstrapApplication(AppComponent, appConfig)
-  .catch(err => console.error(err));
+export { routes };
