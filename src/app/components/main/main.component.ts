@@ -92,9 +92,11 @@ throw new Error('Method not implemented.');
       return;
     }
 
-    this.loaderService.show();
+    
     try {
       await this.analizeImage();
+      this.songInfo = true;
+      
     } catch (error) {
       console.error('Error al analizar la imagen:', error);
     } finally {
@@ -142,19 +144,17 @@ throw new Error('Method not implemented.');
       console.error('Error al buscar canción en Deezer:', error.message);
       alert(error.message);
       this.clearAudioPlayer();
-      /*
+      this.loaderService.hide();
       if (this.apiCallsLeft > 0) {
         this.analizeImage().then(() => {
           this.apiCallsLeft -= 1;
           console.log("quedan: " + this.apiCallsLeft + " intentos");
         }).catch(err => {
-          console.error('Error al analizar la imagen:', err);
           alert("¡Ups! Algo ha salido mal, prueba de nuevo");
         });
       } else {
         alert("¡Ups! Algo ha salido mal, prueba de nuevo");
       }
-        */
     }
   });
 }
@@ -182,6 +182,7 @@ throw new Error('Method not implemented.');
   }
 
   async analizeImage() {
+    this.loaderService.show();
     if (!this.imageData.file) {
       throw new Error('No image file selected');
     }
@@ -197,7 +198,6 @@ throw new Error('Method not implemented.');
       };
       this.colors = result.colors; // Guardar colores para el gradiente
       this.searchSong(this.songData.author, this.songData.title);
-      this.songInfo = true;
       
     } catch (error) {
       console.error('Error al analizar la imagen:', error);
