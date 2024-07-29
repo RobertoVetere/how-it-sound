@@ -87,6 +87,7 @@
             alt="imagen de entrada"
             [src]="imageData.src"
             class="object-cover object-center w-full h-full"
+            placeholder="placeholder.png"
           />
         </div>
       </div>
@@ -111,10 +112,11 @@
           class="border bg-card text-card-foreground shadow-sm flex aspect-square items-center justify-center overflow-hidden rounded-2xl"
         >
           <img
-            *ngIf="!isLoading && imageNotComp.src"
+          
             alt="imagen de entrada"
             [src]="imageData.src"
             class="object-cover object-center w-full h-full"
+            [appDefaultImg]="imageData.file" placeholder="placeholder.png"
           />
         </div>
       </div>

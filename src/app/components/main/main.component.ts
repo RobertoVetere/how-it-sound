@@ -8,13 +8,14 @@ import { LoaderService } from '../../services/loader.service';
 import { MusicFilterComponent } from '../music-filter/music-filter.component';
 import { ImageData } from '../../models/image.data';
 import { SongData } from '../../models/song.data';
-import imageCompression from 'browser-image-compression';
+import { ImageProcessingService } from '../../services/image-upload.service';
+import { DefaultImgDirective } from '../../directives/default-img.directive';
 
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, RouterLink, LoaderComponent, MusicFilterComponent],
+  imports: [CommonModule, RouterLink, LoaderComponent, MusicFilterComponent, DefaultImgDirective],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -27,7 +28,8 @@ throw new Error('Method not implemented.');
   audioPlayer: HTMLAudioElement | null = null;
   constructor(private chatService: ChatService, private loaderService: LoaderService, private deezerService: DeezerService,
     private renderer: Renderer2,
-    private elementRef: ElementRef) {
+    private elementRef: ElementRef,
+  private imageProcessingService: ImageProcessingService,) {
       this.loaderService.loading$.subscribe((loading) => {
       this.loading = loading;
     });
@@ -42,41 +44,28 @@ throw new Error('Method not implemented.');
   colors: string[] = [];
   loading: boolean = false;
   apiCallsLeft: number = 3;
-  isLoading = false;
+  imageIsLoading = false;
 
  async onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.isLoading = true; // Mostrar placeholder mientras se carga la imagen
-
-      try {
-        // Cargar y procesar la imagen
-        await this.processImage(file);
-
-        // Una vez procesada la imagen, se actualizará el estado para mostrarla
-        this.isLoading = false;
-      } catch (error) {
-        console.error('Error processing image:', error);
-        this.isLoading = false; // Ocultar placeholder en caso de error
-      }
+  const file: File = event.target.files[0];
+  if (file) {
+    try {
+      await this.processImage(file);
+    } catch (error) {
+      console.error('Error processing image:', error);
     }
   }
+}
 
-   private async processImage(file: File) {
-    // Comprimir imagen
-    const options = {
-      maxSizeMB: 0.1,
-      maxWidthOrHeight: 800,
-      useWebWorker: true,
-      initialQuality: 0.5
-    };
-    const compressedFile = await imageCompression(file, options);
-    this.imageData.file = compressedFile;
-    this.imageData.src = await this.readFileAsDataURL(compressedFile);
-    // Cargar imagen no comprimida
-    this.imageNotComp.file = file;
-    this.imageNotComp.src = await this.readFileAsDataURL(file);
+
+  private async processImage(file: File) {
+  try {
+    this.imageData.src = await this.imageProcessingService.compressImage(file);
+    this.imageData.file = file; // El archivo comprimido ya está en `src`
+  } catch (error) {
+    console.error('Error processing image:', error);
   }
+}
 
 
 private readFileAsDataURL(file: File): Promise<string> {
@@ -95,7 +84,7 @@ private readFileAsDataURL(file: File): Promise<string> {
   }
 
   async showHowItSound() {
-    if (!this.imageNotComp.file) {
+    if (!this.imageData.file) {
       alert('Debe seleccionar una imagen.');
       return;
     }
