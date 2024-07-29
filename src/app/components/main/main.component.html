@@ -115,6 +115,7 @@
             alt="imagen de entrada"
             [src]="imageData.src"
             class="object-cover object-center w-full h-full"
+            [appDefaultImg]="imageData.file"
             placeholder="placeholder.png"
           />
         </div>
@@ -124,12 +125,45 @@
         <h2 class="text-xl font-bold text-center mb-4">
           {{ songData.title + " - " + songData.author }}
         </h2>
-        <p class="text-gray-700 text-center mb-6">{{ songData.description }}</p>
-        <div class="flex justify-center mb-4">
-          <audio controls id="audioPlayer" class="w-full">
-            <source [src]="songData.link" type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
+        <p class="text-gray-700 text-center">{{ songData.description }}</p>
+        <div class="audio-player">
+          <button
+            (click)="togglePlay()"
+            class="play-pause-btn"
+            [ngClass]="{ playing: isPlaying }"
+          >
+            <span *ngIf="!isPlaying">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="60"
+                height="60"
+                viewBox="0 0 24 24"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </span>
+            <span *ngIf="isPlaying">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="60"
+                height="60"
+                viewBox="0 0 24 24"
+              >
+                <path d="M6 19h4V5H6v14zm8 0h4V5h-4v14z" />
+              </svg>
+            </span>
+          </button>
+          <div class="progress-container">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              [(ngModel)]="currentTime"
+              (change)="seek($event)"
+              class="progress-bar"
+            />
+          </div>
         </div>
         <div
           class="modalButtons flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 items-center mt-4"

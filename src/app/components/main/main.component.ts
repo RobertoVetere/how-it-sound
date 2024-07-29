@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Renderer2, NgModule } from '@angular/core';
 import { ChatService } from '../../services/chat.service'; 
 import { CommonModule } from '@angular/common';
 import { DeezerService } from '../../services/deezer.service';
@@ -10,16 +10,29 @@ import { ImageData } from '../../models/image.data';
 import { SongData } from '../../models/song.data';
 import { ImageProcessingService } from '../../services/image-upload.service';
 import { DefaultImgDirective } from '../../directives/default-img.directive';
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, RouterLink, LoaderComponent, MusicFilterComponent, DefaultImgDirective],
+  imports: [CommonModule, RouterLink, LoaderComponent, MusicFilterComponent, DefaultImgDirective,FormsModule],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
 export class MainComponent {
+
+  ngAfterViewInit() {
+    this.audioPlayer = new Audio();
+    if (this.audioPlayer) {
+      this.audioPlayer.addEventListener('timeupdate', () => {
+        this.currentTime = (this.audioPlayer!.currentTime / this.audioPlayer!.duration) * 100;
+      });
+
+      this.audioPlayer.addEventListener('loadedmetadata', () => {
+        this.duration = this.audioPlayer!.duration;
+      });
+    }
+  }
 
 saveToGallery() {
 throw new Error('Method not implemented.');
@@ -34,7 +47,8 @@ throw new Error('Method not implemented.');
       this.loading = loading;
     });
   }
-  
+  currentTime: number = 0;
+  duration: number = 0;
   imageData: ImageData = { src: 'djs.jpg', file: null };
   imageNotComp: ImageData = { src: 'djs.jpg', file: null };
   songData: SongData = { title: '', author: '', description: '', link: '', colors: [] };
@@ -45,6 +59,7 @@ throw new Error('Method not implemented.');
   loading: boolean = false;
   apiCallsLeft: number = 3;
   imageIsLoading = false;
+  isPlaying: boolean = false;
 
  async onFileSelected(event: any) {
   const file: File = event.target.files[0];
@@ -109,57 +124,50 @@ private readFileAsDataURL(file: File): Promise<string> {
   }
 
   closeModal() {
+    this.clearAudioPlayer();
     this.songInfo = false; 
     document.querySelector('main')?.classList.remove('bg-gradient-animation');
   }
 
   searchSong(songAuthor: string, songTitle: string) {
-  this.deezerService.findSongOnDeezer(songAuthor, songTitle).subscribe({
-    next: (link: string) => {
-      console.log(link);
-      this.songData.link = link;
-      this.audioPlayer = document.getElementById('audioPlayer') as HTMLAudioElement;
+    this.deezerService.findSongOnDeezer(songAuthor, songTitle).subscribe({
+      next: async (link: string) => {
+        console.log(link);
+        this.songData.link = link;
+        if (this.audioPlayer) {
+          this.audioPlayer.src = this.songData.link;
+          this.audioPlayer.load();
+          this.audioPlayer.loop = true;
+          this.audioPlayer.volume = 0.5;
+          await this.audioPlayer.play();
+          this.isPlaying = true;
+        }
 
-      if (this.audioPlayer) {
-        this.audioPlayer.src = this.songData.link;
-        this.audioPlayer.load();
+        // Asegúrate de que el gradiente se aplique antes de mostrar la modal
+        this.applyGradientBackground();
 
-        this.audioPlayer.addEventListener('canplaythrough', () => {
-          this.audioPlayer!.loop = true;
-          this.audioPlayer!.volume = 0.5;
-          this.audioPlayer!.play();
-          
-          this.setupAudioEvents();
-        }, { once: true });
-      }
-
-      // Asegúrate de que el gradiente se aplique antes de mostrar la modal
-      this.applyGradientBackground();
-
-      // Muestra la modal después de aplicar el gradiente
-      this.songInfo = true;
-      this.loaderService.hide();
-    },
-    error: (error) => {
-      //console.error('Error al buscar canción en Deezer:', error.message);
-      //alert(error.message);
-      this.clearAudioPlayer();
-      this.loaderService.hide();
-      if (this.apiCallsLeft > 0) {
-        this.analizeImage().then(() => {
-          this.apiCallsLeft -= 1;
-          console.log("quedan: " + this.apiCallsLeft + " intentos");
-        }).catch(err => {
-          alert("¡Ups! Algo ha salido mal, prueba de nuevo");
-        });
-      } else {
-        alert("¡Ups! Algo ha salido mal, prueba de nuevo");
+        // Muestra la modal después de aplicar el gradiente
+        this.songInfo = true;
         this.loaderService.hide();
+      },
+      error: (error) => {
+        console.error('Error al buscar canción en Deezer:', error.message);
+        this.clearAudioPlayer();
+        this.loaderService.hide();
+        if (this.apiCallsLeft > 0) {
+          this.analizeImage().then(() => {
+            this.apiCallsLeft -= 1;
+            console.log("quedan: " + this.apiCallsLeft + " intentos");
+          }).catch(err => {
+            alert("¡Ups! Algo ha salido mal, prueba de nuevo");
+          });
+        } else {
+          alert("¡Ups! Algo ha salido mal, prueba de nuevo");
+          this.loaderService.hide();
+        }
       }
-    }
-  });
-  
-}
+    });
+  }
 private setupAudioEvents() {
   if (this.audioPlayer) {
     this.audioPlayer.addEventListener('play', () => {
@@ -211,7 +219,24 @@ private setupAudioEvents() {
     }
   }
 
-
+ togglePlay() {
+  if (this.audioPlayer) {
+    if (this.isPlaying) {
+      this.audioPlayer.pause();
+      this.removeGradientBackground(); // Desactiva el gradiente al pausar
+    } else {
+      this.audioPlayer.play();
+      this.applyGradientBackground(); // Activa el gradiente al reproducir
+    }
+    this.isPlaying = !this.isPlaying;
+  }
+}
+  seek(event: any) {
+  const value = parseFloat((event.target as HTMLInputElement).value);  // Convertir a número
+  if (this.audioPlayer) {
+    this.audioPlayer.currentTime = (this.audioPlayer.duration * value) / 100;
+  }
+}
   
 }
 
