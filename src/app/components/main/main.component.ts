@@ -11,6 +11,8 @@ import { SongData } from '../../models/song.data';
 import { ImageProcessingService } from '../../services/image-upload.service';
 import { DefaultImgDirective } from '../../directives/default-img.directive';
 import { FormsModule } from '@angular/forms';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-main',
@@ -57,7 +59,7 @@ throw new Error('Method not implemented.');
   constructor(private chatService: ChatService, private loaderService: LoaderService, private deezerService: DeezerService,
     private renderer: Renderer2,
     private elementRef: ElementRef,
-  private imageProcessingService: ImageProcessingService,) {
+  private imageProcessingService: ImageProcessingService,private cdr: ChangeDetectorRef ) {
       this.loaderService.loading$.subscribe((loading) => {
       this.loading = loading;
     });
@@ -92,6 +94,7 @@ throw new Error('Method not implemented.');
   try {
     this.imageData.src = await this.imageProcessingService.compressImage(file);
     this.imageData.file = file; // El archivo comprimido ya está en `src`
+    this.cdr.detectChanges();
   } catch (error) {
     console.error('Error processing image:', error);
   }
