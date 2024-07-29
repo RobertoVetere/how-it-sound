@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, Renderer2 ,OnInit} from '@angular/core';
+import { Component, ElementRef, ViewChild, Renderer2 ,OnInit, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './intro.component.html',
   styleUrls: ['./intro.component.css']
 })
-export class IntroComponent implements OnInit {
+export class IntroComponent implements OnInit, OnDestroy {
 
 
 
@@ -54,6 +54,63 @@ constructor(
    ngOnInit() {
      // Mezclar imágenes al inicio si es necesario
   }
+
+  ngOnDestroy() {
+  console.log('IntroComponent destroyed');
+
+  // Limpiar el elemento de audio principal
+  if (this.audioPlayer && this.audioPlayer.nativeElement) {
+    const audioElement = this.audioPlayer.nativeElement;
+    if (audioElement.pause) {
+      audioElement.pause(); // Pausa la reproducción
+      audioElement.src = ''; // Limpia la fuente
+      audioElement.load(); // Recarga el elemento
+    }
+  }
+
+  // Limpiar el elemento de audio modal si existe
+  if (this.audioPlayerModal && this.audioPlayerModal.nativeElement) {
+    const audioElementModal = this.audioPlayerModal.nativeElement;
+    if (audioElementModal.pause) {
+      audioElementModal.pause();
+      audioElementModal.src = '';
+      audioElementModal.load();
+    }
+  }
+
+  // Limpiar el elemento de slide track
+  if (this.slideTrack && this.slideTrack.nativeElement) {
+    const slideTrackElement = this.slideTrack.nativeElement;
+    if (slideTrackElement.classList) {
+      slideTrackElement.classList.remove('animate-scroll');
+    }
+  }
+
+  // Solo acceder al DOM si está definido (contexto del navegador)
+  if (typeof document !== 'undefined') {
+    // Revertir cambios en el DOM
+    const introContainer = document.getElementById('intro-container');
+    if (introContainer && introContainer.classList) {
+      introContainer.classList.remove('bg-gradient-animation');
+    }
+
+    const buttonPlay = document.getElementById('btnPlayAndHideBtn');
+    if (buttonPlay && buttonPlay.classList) {
+      buttonPlay.classList.remove('hideBtn');
+    }
+  }
+
+  // Asegurarse de que el garbage collector pueda liberar memoria
+  // No hacer referencias a objetos que ya deberían ser destruidos
+  this.audioPlayer = null!;
+  this.audioPlayerModal = null!;
+  this.slideTrack = null!;
+  this.songModal = null!;
+  this.currentImageSrc = '';
+  this.currentSong = { title: '', author: '', description: '', link: '' };
+  this.showModal = false;
+}
+
 
   // Método para mezclar el array
   shuffleImages() {

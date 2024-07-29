@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GoogleAuthService } from '../../services/authgoogle.service';
 import { Router } from '@angular/router';
 
@@ -9,9 +9,11 @@ declare var google: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   
   constructor(private googleAuthService: GoogleAuthService, private router: Router) {}
+
+  private scriptLoaded = false;
 
   signInWithGmail() {
     // Aquí podrías implementar la lógica para manejar el inicio de sesión con Gmail
@@ -40,6 +42,20 @@ export class LoginComponent implements OnInit {
       });
     } else {
       console.error('Document is not defined. This code should run in the browser.');
+    }
+  }
+
+  ngOnDestroy() {
+    // Limpieza de recursos si es necesario
+    if (this.scriptLoaded) {
+      // Elimina el botón de Google y cualquier otro recurso añadido
+      const gmailButton = document.getElementById('gmail-btn');
+      if (gmailButton) {
+        gmailButton.innerHTML = ''; // Limpia el contenido del botón
+      }
+
+      // Aquí podrías también eliminar el script si se ha añadido dinámicamente
+      // (Esto no es necesario si el script se carga de forma estática)
     }
   }
 }

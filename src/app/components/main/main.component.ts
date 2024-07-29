@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, NgModule } from '@angular/core';
+import { Component, ElementRef, Renderer2, NgModule, OnDestroy } from '@angular/core';
 import { ChatService } from '../../services/chat.service'; 
 import { CommonModule } from '@angular/common';
 import { DeezerService } from '../../services/deezer.service';
@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
-export class MainComponent {
+export class MainComponent implements OnDestroy {
 
   ngAfterViewInit() {
     this.audioPlayer = new Audio();
@@ -34,6 +34,21 @@ export class MainComponent {
     }
   }
 
+  ngOnDestroy() {
+    this.clearAudioPlayer();
+  if (this.audioPlayer) {
+    this.audioPlayer.removeEventListener('timeupdate', this.updateTime);
+    this.audioPlayer.removeEventListener('loadedmetadata', this.updateDuration);
+  }
+}
+
+private updateTime = () => {
+  this.currentTime = (this.audioPlayer!.currentTime / this.audioPlayer!.duration) * 100;
+};
+
+private updateDuration = () => {
+  this.duration = this.audioPlayer!.duration;
+};
 saveToGallery() {
 throw new Error('Method not implemented.');
 }
@@ -231,9 +246,9 @@ private setupAudioEvents() {
     this.isPlaying = !this.isPlaying;
   }
 }
-  seek(event: any) {
+ seek(event: any) {
   const value = parseFloat((event.target as HTMLInputElement).value);  // Convertir a número
-  if (this.audioPlayer) {
+  if (this.audioPlayer && this.audioPlayer.duration > 0) {
     this.audioPlayer.currentTime = (this.audioPlayer.duration * value) / 100;
   }
 }
