@@ -58,7 +58,7 @@ button.ml-0.btn-hover.inline-flex.items-center.justify-center.whitespace-nowrap.
   overflow-y: auto;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .modal-sm {
     position: absolute;
     top: 0;
