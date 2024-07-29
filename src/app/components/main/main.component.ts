@@ -127,23 +127,23 @@ private readFileAsDataURL(file: File): Promise<string> {
         this.audioPlayer.addEventListener('canplaythrough', () => {
           this.audioPlayer!.loop = true;
           this.audioPlayer!.volume = 0.5;
-          this.audioPlayer!.play();
-          this.applyGradientBackground();
+          if(this.audioPlayer != null){
+            this.audioPlayer.play();
+          }
+          this.setupAudioEvents();
         }, { once: true });
-
-        this.audioPlayer.addEventListener('pause', () => {
-          document.querySelector('main')?.classList.remove('bg-gradient-animation');
-        });
-        this.audioPlayer.addEventListener('play', () => {
-          document.querySelector('main')?.classList.add('bg-gradient-animation');
-        });
       }
+
+      // Asegúrate de que el gradiente se aplique antes de mostrar la modal
+      this.applyGradientBackground();
+
+      // Muestra la modal después de aplicar el gradiente
       this.songInfo = true;
       this.loaderService.hide();
     },
     error: (error) => {
-      console.error('Error al buscar canción en Deezer:', error.message);
-      alert(error.message);
+      //console.error('Error al buscar canción en Deezer:', error.message);
+      //alert(error.message);
       this.clearAudioPlayer();
       this.loaderService.hide();
       if (this.apiCallsLeft > 0) {
@@ -159,21 +159,26 @@ private readFileAsDataURL(file: File): Promise<string> {
       }
     }
   });
+  
+}
+private setupAudioEvents() {
+  if (this.audioPlayer) {
+    this.audioPlayer.addEventListener('pause', () => {
+      this.applyGradientBackground();
+    });
+    this.audioPlayer.addEventListener('play', () => {
+      this.removeGradientBackground();
+    });
+  }
 }
 
-
-  private applyGradientBackground() {
-    const gradient = `linear-gradient(-45deg, ${this.colors.join(', ')})`;
-    document.querySelector('main')?.style, 'background', gradient;
+   private applyGradientBackground() {
     document.querySelector('main')?.classList.add('bg-gradient-animation');
     
   }
+
   private removeGradientBackground() {
-    const mainElement = this.elementRef.nativeElement.querySelector('main');
-    if (mainElement) {
-      this.renderer.setStyle(mainElement, 'background', '');
-      mainElement.classList.remove('bg-gradient-animation');
-    }
+    document.querySelector('main')?.classList.remove('bg-gradient-animation');
   }
   private clearAudioPlayer() {
     if (this.audioPlayer) {
