@@ -8,10 +8,10 @@ export class ImageProcessingService {
 
   async compressImage(file: File): Promise<string> {
     const options = {
-      maxSizeMB: 0.1,
-      maxWidthOrHeight: 800,
-      useWebWorker: true,
-      initialQuality: 0.5
+       maxSizeMB: 1,
+    maxWidthOrHeight: 2000, 
+    useWebWorker: true,
+    initialQuality: 1
     };
 
     try {

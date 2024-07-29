@@ -163,10 +163,10 @@ private readFileAsDataURL(file: File): Promise<string> {
 }
 private setupAudioEvents() {
   if (this.audioPlayer) {
-    this.audioPlayer.addEventListener('pause', () => {
+    this.audioPlayer.addEventListener('play', () => {
       this.applyGradientBackground();
     });
-    this.audioPlayer.addEventListener('play', () => {
+    this.audioPlayer.addEventListener('pause', () => {
       this.removeGradientBackground();
     });
   }
