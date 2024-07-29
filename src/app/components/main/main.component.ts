@@ -127,9 +127,8 @@ private readFileAsDataURL(file: File): Promise<string> {
         this.audioPlayer.addEventListener('canplaythrough', () => {
           this.audioPlayer!.loop = true;
           this.audioPlayer!.volume = 0.5;
-          if(this.audioPlayer != null){
-            this.audioPlayer.play();
-          }
+          this.audioPlayer!.play();
+          
           this.setupAudioEvents();
         }, { once: true });
       }
