@@ -94,7 +94,7 @@ throw new Error('Method not implemented.');
   try {
     this.imageData.src = await this.imageProcessingService.compressImage(file);
     this.imageData.file = file; // El archivo comprimido ya está en `src`
-    //this.cdr.detectChanges();
+    this.cdr.detectChanges();
   } catch (error) {
     console.error('Error processing image:', error);
   }
