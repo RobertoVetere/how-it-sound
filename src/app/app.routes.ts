@@ -23,6 +23,11 @@ const routes: Routes = [
     loadComponent: () => import('./pages/gallery/gallery.component').then(m => m.GalleryComponent),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'manifest',
+    loadComponent: () => import('./pages/manifest/manifest.component').then(m => m.ManifestComponent),
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: 'home' }
 ];
 

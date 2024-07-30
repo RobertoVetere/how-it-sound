@@ -6,19 +6,21 @@
       >
         Ok! Tienes muchas fotos, pero ¿A qué suenan?
       </h1>
-      <p class="py-4 md:py-8 text-base md:text-3xl text-center text-gray-500">
+      <p class="p-4 md:py-8 text-base md:text-3xl text-center text-gray-500">
         PhotoSong utiliza inteligencia artificial para analizar tus fotografías
         y crear un match musical de tus mejores momentos. ¡Ahora, tu galería,
         suena!
+      </p>
+      <div class="flex justify-center">
         <button
           id="btnPlayAndHideBtn"
-          class="ml-0 btn-hover inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-8 py-2 mt-6 space-x-2 rounded-full border border-primary transition-colors hover:bg-black hover:text-white"
+          class="ml-0 btn-hover inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-8 py-2 mt-2 mb-4 space-x-2 rounded-full border border-primary transition-colors hover:bg-black hover:text-white"
           (click)="startAnimation()"
           (click)="hideButton()"
         >
           <span class="text-muted-foreground font-semibold"> 🎶 Play 🎶 </span>
         </button>
-      </p>
+      </div>
     </div>
   </div>
 
@@ -85,24 +87,24 @@
   <!-- Capa de fondo para bloquear interacciones -->
   <div
     *ngIf="showModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 sm:p-8"
+    class="md:fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 sm:p-8"
   >
     <!-- Modal -->
     <div
-      class="relative z-50 bg-white max-w-5xl mx-auto rounded-lg shadow-lg overflow-hidden"
+      class="modal-sm relative z-50 bg-white max-w-5xl mx-auto rounded-lg shadow-lg overflow-hidden"
     >
       <!-- Contenido de la modal -->
       <div class="grid grid-cols-1 sm:grid-cols-2">
         <!-- Sección de imagen -->
-        <div class="bg-gray-200 p-8 flex items-center justify-center">
+        <div class="bg-gray-200 p-2 flex items-center justify-center">
           <div
-            class="border border-gray-300 bg-white rounded-lg shadow-md overflow-hidden"
+            class="border bg-card text-card-foreground shadow-sm flex aspect-square items-center justify-center overflow-hidden rounded-2xl"
           >
             <img
-              loading="lazy"
               alt="imagen de entrada"
               [src]="currentImageSrc"
-              class="object-cover object-center w-full h-full h-[350px] sm:h-[600px] sm:w-[600px]"
+              class="object-cover object-center w-full h-full"
+              placeholder="placeholder.png"
             />
           </div>
         </div>
@@ -152,7 +154,7 @@
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-gray-600"
+          class="h-6 w-6 text-black bg-white rounded-lg m-2"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

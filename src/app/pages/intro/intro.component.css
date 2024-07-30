@@ -116,3 +116,12 @@
     width: 200px;
   }
 }
+
+@media (max-width: 768px) {
+  .modal-sm {
+    position: absolute;
+    top: 0;
+    margin: 10px;
+    width: 95%;
+  }
+}
