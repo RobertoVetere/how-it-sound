@@ -66,8 +66,8 @@ throw new Error('Method not implemented.');
   }
   currentTime: number = 0;
   duration: number = 0;
-  imageData: ImageData = { src: 'djs.jpg', file: null };
-  imageNotComp: ImageData = { src: 'djs.jpg', file: null };
+  imageData: ImageData = { src: 'djs.webp', file: null };
+  imageNotComp: ImageData = { src: 'djs.webp', file: null };
   songData: SongData = { title: '', author: '', description: '', link: '', colors: [] };
   objectResult: Object | undefined;
   songInfo: boolean = false;
@@ -94,7 +94,7 @@ throw new Error('Method not implemented.');
   try {
     this.imageData.src = await this.imageProcessingService.compressImage(file);
     this.imageData.file = file; // El archivo comprimido ya está en `src`
-    this.cdr.detectChanges();
+    //this.cdr.detectChanges();
   } catch (error) {
     console.error('Error processing image:', error);
   }
