@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DeezerService {
-  private backendApiUrl = 'https://photosong-backend-production.up.railway.app/api/deezer/song';
+  private backendApiUrl = 'http://localhost:8081/api/deezer/song';
 
   constructor(private http: HttpClient) { }
 

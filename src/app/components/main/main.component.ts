@@ -12,12 +12,13 @@ import { ImageProcessingService } from '../../services/image-upload.service';
 import { DefaultImgDirective } from '../../directives/default-img.directive';
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
+import { LoadingOverlayComponent } from "../loading-overlay/loading-overlay.component";
 
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, RouterLink, LoaderComponent, MusicFilterComponent, DefaultImgDirective,FormsModule],
+  imports: [CommonModule, RouterLink, LoaderComponent, MusicFilterComponent, DefaultImgDirective, FormsModule, LoadingOverlayComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
@@ -117,6 +118,7 @@ private readFileAsDataURL(file: File): Promise<string> {
   }
 
   async showHowItSound() {
+    this.clearAudioPlayer();
     if (!this.imageData.file) {
       alert('Debe seleccionar una imagen.');
       return;
