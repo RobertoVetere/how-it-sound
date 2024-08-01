@@ -25,6 +25,7 @@ import { LoadingOverlayComponent } from "../loading-overlay/loading-overlay.comp
 export class MainComponent implements OnDestroy {
 
   ngAfterViewInit() {
+    this.cdr.detectChanges();
     this.audioPlayer = new Audio();
     if (this.audioPlayer) {
       this.audioPlayer.addEventListener('timeupdate', () => {

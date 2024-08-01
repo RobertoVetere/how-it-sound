@@ -9,4 +9,12 @@ import { Component } from '@angular/core';
 })
 export class LoaderComponent {
 
+  preloadImages() {
+  const images = ['assets/images/loader.webp'];
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
 }
