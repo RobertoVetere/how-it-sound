@@ -28,6 +28,11 @@ const routes: Routes = [
     loadComponent: () => import('./pages/manifest/manifest.component').then(m => m.ManifestComponent),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'playlist',
+    loadComponent: () => import('./pages/playlist/playlist.component').then(m => m.PlaylistComponent),
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: 'home' }
 ];
 

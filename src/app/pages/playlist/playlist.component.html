@@ -1,0 +1,50 @@
+<main class="min-h-screen py-16 antialiased bg-gray-100">
+  <div class="flex flex-col items-center justify-center">
+    <div class="z-10 max-w-2xl px-5 xl:px-0">
+      <!-- Imagen principal -->
+      <div class="relative mb-10">
+        <div class="border bg-white shadow-sm flex aspect-square items-center justify-center overflow-hidden rounded-xl">
+          <img
+            alt="Imagen de entrada"
+            [src]="imageFile ? imageUrl : 'placeholder.png'"
+            class="object-cover object-center w-full h-full"
+          />
+        </div>
+        <h1 class="text-4xl font-bold text-center mt-4 text-gray-900">La Playlist de tu canción</h1>
+      </div>
+      
+      <!-- Lista de canciones -->
+      <div class="space-y-8">
+        <div *ngFor="let song of songData; let i = index" class="flex items-center space-x-4 p-4 border rounded-lg shadow-md bg-white">
+          <!-- Imagen de la canción -->
+          <img
+            *ngIf="song.cover"
+            [src]="song.cover"
+            alt="{{ song.title }} cover"
+            class="w-16 h-16 object-cover rounded-lg"
+          />
+          <div class="flex-1">
+            <!-- Información de la canción -->
+            <h2 class="text-xl font-semibold text-gray-900">{{ song.title }}</h2>
+            <p class="text-gray-600">{{ song.artist }}</p>
+          </div>
+          <!-- Reproductor de audio -->
+          <div class="flex-1 flex items-center justify-end">
+            <audio
+              #audio
+              [id]="'audio' + i"
+              *ngIf="song.preview"
+              controls
+              class="w-full"
+              (ended)="playNext(i)"
+              (play)="handlePlay(i)"
+            >
+              <source [src]="song.preview" type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -13,6 +13,8 @@ import { DefaultImgDirective } from '../../directives/default-img.directive';
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
 import { LoadingOverlayComponent } from "../loading-overlay/loading-overlay.component";
+import { Router } from '@angular/router';
+import { ImageStorageService } from '../../services/imagestorage.service';
 
 
 @Component({
@@ -24,43 +26,12 @@ import { LoadingOverlayComponent } from "../loading-overlay/loading-overlay.comp
 })
 export class MainComponent implements OnDestroy {
 
-  ngAfterViewInit() {
-    this.cdr.detectChanges();
-    this.audioPlayer = new Audio();
-    if (this.audioPlayer) {
-      this.audioPlayer.addEventListener('timeupdate', () => {
-        this.currentTime = (this.audioPlayer!.currentTime / this.audioPlayer!.duration) * 100;
-      });
-
-      this.audioPlayer.addEventListener('loadedmetadata', () => {
-        this.duration = this.audioPlayer!.duration;
-      });
-    }
-  }
-
-  ngOnDestroy() {
-    this.clearAudioPlayer();
-  if (this.audioPlayer) {
-    this.audioPlayer.removeEventListener('timeupdate', this.updateTime);
-    this.audioPlayer.removeEventListener('loadedmetadata', this.updateDuration);
-  }
-}
-
-private updateTime = () => {
-  this.currentTime = (this.audioPlayer!.currentTime / this.audioPlayer!.duration) * 100;
-};
-
-private updateDuration = () => {
-  this.duration = this.audioPlayer!.duration;
-};
-saveToGallery() {
-throw new Error('Method not implemented.');
-}
-
   audioPlayer: HTMLAudioElement | null = null;
   constructor(private chatService: ChatService, private loaderService: LoaderService, private deezerService: DeezerService,
     private renderer: Renderer2,
     private elementRef: ElementRef,
+    private router: Router,
+     private imageStorageService: ImageStorageService,
   private imageProcessingService: ImageProcessingService,private cdr: ChangeDetectorRef ) {
       this.loaderService.loading$.subscribe((loading) => {
       this.loading = loading;
@@ -79,6 +50,66 @@ throw new Error('Method not implemented.');
   apiCallsLeft: number = 3;
   imageIsLoading = false;
   isPlaying: boolean = false;
+  
+createPlaylist() {
+  if (this.imageData.file) {
+    this.loaderService.show();
+    this.imageStorageService.setFile(this.imageData.file);
+    this.router.navigate(['/playlist'], { queryParams: { new: 'true' } });
+  } else {
+    alert('No hay imagen seleccionada');
+  }
+}
+
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+    this.audioPlayer = new Audio();
+    if (this.audioPlayer) {
+      this.audioPlayer.addEventListener('timeupdate', () => {
+        this.currentTime = (this.audioPlayer!.currentTime / this.audioPlayer!.duration) * 100;
+      });
+
+      this.audioPlayer.addEventListener('loadedmetadata', () => {
+        this.duration = this.audioPlayer!.duration;
+      });
+    }
+    //this.loadSavedImage();
+  }
+
+  ngOnDestroy() {
+    this.clearAudioPlayer();
+  if (this.audioPlayer) {
+    this.audioPlayer.removeEventListener('timeupdate', this.updateTime);
+    this.audioPlayer.removeEventListener('loadedmetadata', this.updateDuration);
+  }
+}
+
+ private async loadSavedImage() {
+    const savedFile = this.imageStorageService.getFile();
+    if (savedFile) {
+      try {
+        this.imageData.src = await this.readFileAsDataURL(savedFile);
+        this.imageData.file = savedFile;
+        this.cdr.detectChanges();
+      } catch (error) {
+        console.error('Error al cargar la imagen guardada:', error);
+      }
+    }
+  }
+
+private updateTime = () => {
+  this.currentTime = (this.audioPlayer!.currentTime / this.audioPlayer!.duration) * 100;
+};
+
+private updateDuration = () => {
+  this.duration = this.audioPlayer!.duration;
+};
+saveToGallery() {
+throw new Error('Method not implemented.');
+}
+
+  
 
  async onFileSelected(event: any) {
   const file: File = event.target.files[0];
@@ -224,6 +255,8 @@ private setupAudioEvents() {
 
     try {
       const result = await this.chatService.analyzeTextWithImage(this.imageData.file);
+      
+
       this.songData = {
         title: result.title,
         author: result.authorSong,

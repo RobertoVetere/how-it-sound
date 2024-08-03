@@ -70,6 +70,7 @@
           </a>
         </div>
       </div>
+
       <div
         class="group relative mx-auto mt-10 size-full h-[350px] sm:h-[600px] sm:w-[600px]"
       >
@@ -78,6 +79,14 @@
           (click)="showHowItSound()"
         >
           <span class="text-muted-foreground font-semibold">Ver Resultado</span>
+        </button>
+        <button
+          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground h-10 px-4 py-2 hover:bg-secondary absolute right-5 top-5 z-20 rounded-full border transition-all hover:scale-105 active:scale-95 bg-black text-white hover:bg-white hover:text-black"
+          (click)="createPlaylist()"
+        >
+          <span class="text-muted-foreground font-semibold"
+            >Radio de la foto</span
+          >
         </button>
 
         <div
@@ -192,7 +201,7 @@
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-6 w-6 text-black bg-white rounded-lg m-2"
-          fill="none" 
+          fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
         >
