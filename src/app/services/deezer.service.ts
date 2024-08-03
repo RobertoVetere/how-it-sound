@@ -12,10 +12,10 @@ interface Song {
   providedIn: 'root'
 })
 export class DeezerService {
-  //private backendDeezerSong = 'https://photosong-backend-production.up.railway.app/api/deezer/song';
-  //private backendPlayslist = 'https://photosong-backend-production.up.railway.app/api/deezer/song';
-  private backendDeezerSong = 'http://localhost:8081/api/deezer/song';
-  private backendPlayslist = 'http://localhost:8081/api/deezer/playlist';
+  private backendDeezerSong = 'https://photosong-backend-production.up.railway.app/api/deezer/song';
+  private backendPlayslist = 'https://photosong-backend-production.up.railway.app/api/deezer/playlist';
+  //private backendDeezerSong = 'http://localhost:8081/api/deezer/song';
+  //private backendPlayslist = 'http://localhost:8081/api/deezer/playlist';
 
   constructor(private http: HttpClient) { }
 
