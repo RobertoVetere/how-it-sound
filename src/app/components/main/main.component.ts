@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, NgModule, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Renderer2, NgModule, OnDestroy, OnInit } from '@angular/core';
 import { ChatService } from '../../services/chat.service'; 
 import { CommonModule } from '@angular/common';
 import { DeezerService } from '../../services/deezer.service';
@@ -15,6 +15,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { LoadingOverlayComponent } from "../loading-overlay/loading-overlay.component";
 import { Router } from '@angular/router';
 import { ImageStorageService } from '../../services/imagestorage.service';
+import { PlaylistStore } from '../../state/playlist/playlist.store';
 
 
 @Component({
@@ -24,15 +25,19 @@ import { ImageStorageService } from '../../services/imagestorage.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
-export class MainComponent implements OnDestroy {
+export class MainComponent implements OnDestroy, OnInit {
+myGallery() {
+alert('Pronto, estoy en ello :)')
+}
 
   audioPlayer: HTMLAudioElement | null = null;
   constructor(private chatService: ChatService, private loaderService: LoaderService, private deezerService: DeezerService,
-    private renderer: Renderer2,
-    private elementRef: ElementRef,
     private router: Router,
+    private playlistStore: PlaylistStore,
      private imageStorageService: ImageStorageService,
-  private imageProcessingService: ImageProcessingService,private cdr: ChangeDetectorRef ) {
+  private imageProcessingService: ImageProcessingService, 
+  private cdr: ChangeDetectorRef ) 
+  {
       this.loaderService.loading$.subscribe((loading) => {
       this.loading = loading;
     });
@@ -48,18 +53,35 @@ export class MainComponent implements OnDestroy {
   colors: string[] = [];
   loading: boolean = false;
   apiCallsLeft: number = 3;
-  imageIsLoading = false;
   isPlaying: boolean = false;
   
 createPlaylist() {
   if (this.imageData.file) {
-    this.loaderService.show();
-    this.imageStorageService.setFile(this.imageData.file);
-    this.router.navigate(['/playlist'], { queryParams: { new: 'true' } });
+    this.loaderService.show(); 
+    this.playlistStore.update({ isNew: true });
+    this.router.navigate(['/playlist'])
   } else {
     alert('No hay imagen seleccionada');
   }
 }
+
+async ngOnInit(): Promise<void> {
+  this.loaderService.show();
+    const file = this.imageStorageService.getFile();
+    
+    if (file && file instanceof File) {
+      this.imageData.file = file;
+      
+      try {
+        this.imageData.src = await this.imageProcessingService.compressImage(file);
+      } catch (error) {
+        console.error('Error al comprimir la imagen:', error);
+      }
+    } else {
+      console.error('El archivo obtenido no es válido o no es una instancia de File');
+    }
+    this.loaderService.hide();
+  }
 
 
   ngAfterViewInit() {
@@ -74,7 +96,6 @@ createPlaylist() {
         this.duration = this.audioPlayer!.duration;
       });
     }
-    //this.loadSavedImage();
   }
 
   ngOnDestroy() {
@@ -106,7 +127,7 @@ private updateDuration = () => {
   this.duration = this.audioPlayer!.duration;
 };
 saveToGallery() {
-throw new Error('Method not implemented.');
+alert('Pronto, estoy en ello :)')
 }
 
   
@@ -127,6 +148,8 @@ throw new Error('Method not implemented.');
   try {
     this.imageData.src = await this.imageProcessingService.compressImage(file);
     this.imageData.file = file; // El archivo comprimido ya está en `src`
+    this.imageStorageService.clearFile();
+    this.imageStorageService.setFile(this.imageData.file);
     this.cdr.detectChanges();
   } catch (error) {
     console.error('Error processing image:', error);
@@ -166,9 +189,7 @@ private readFileAsDataURL(file: File): Promise<string> {
       
     } catch (error) {
       console.error('Error al analizar la imagen:', error);
-    } finally {
-      
-    }
+    } 
   }
 
   uploadImage() {

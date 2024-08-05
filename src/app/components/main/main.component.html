@@ -42,8 +42,9 @@
             <span>Sube una foto</span>
           </button>
 
-          <a [routerLink]="['/gallery']" routerLinkActive="router-link-active">
+          <a [routerLink]="['/home']" routerLinkActive="router-link-active">
             <button
+              (click)="myGallery()"
               class="btn-hover inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-4 py-2 space-x-2 rounded-full border border-primary transition-colors hover:bg-black hover:text-white"
             >
               <svg
@@ -65,7 +66,7 @@
                 <circle cx="12" cy="8" r="2"></circle>
                 <rect width="16" height="16" x="6" y="2" rx="2"></rect>
               </svg>
-              <span>Mi CV</span>
+              <span>My Gallery</span>
             </button>
           </a>
         </div>
@@ -78,7 +79,7 @@
           class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground h-10 px-4 py-2 hover:bg-secondary absolute left-5 top-5 z-20 rounded-full border transition-all hover:scale-105 active:scale-95 bg-black text-white hover:bg-white hover:text-black"
           (click)="showHowItSound()"
         >
-          <span class="text-muted-foreground font-semibold">Ver Resultado</span>
+          <span class="text-muted-foreground font-semibold">Resultado</span>
         </button>
         <button
           class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground h-10 px-4 py-2 hover:bg-secondary absolute right-5 top-5 z-20 rounded-full border transition-all hover:scale-105 active:scale-95 bg-black text-white hover:bg-white hover:text-black"

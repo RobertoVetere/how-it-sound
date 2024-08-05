@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GoogleAuthService } from '../../services/authgoogle.service';
 import { Router } from '@angular/router';
 
-declare var google: any;
+declare let google: any;
 
 @Component({
   selector: 'app-login',

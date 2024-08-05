@@ -103,16 +103,18 @@ async analyzeTextWithImageToPlaylist(imageFile: File) {
 
     // Definir el prompt que se enviará al modelo
     const prompt = `
-      Eres un experto en música, fotografía y literatura:
-      1. Dame una lista de 15 títulos de canciones que describan esta imagen (solo los títulos, SIN LOS AUTORES!).
-      2. Las canciones deben funcionar juntas para crear una playlist que represente la imagen de la mejor manera posible.
-      3. Dame los autores de las canciones en la lista.
-    `;
+  Eres un experto en música, fotografía y literatura:
+  1. Imagina que eres un curador musical para una playlist basada en esta imagen. Genera una lista de 15 títulos de canciones que encajen con la imagen. Asegúrate de incluir una variedad de géneros y estilos para ofrecer una experiencia musical rica y diversa (solo los títulos, SIN LOS AUTORES).
+  2. Las canciones deben funcionar juntas para crear una playlist que represente la imagen de la mejor manera posible.
+  3. Proporciona los autores de las canciones en la lista para cada título.
+  4. Considera incluir algunos títulos menos conocidos para añadir un toque de sorpresa y descubrimiento.
+`;
+
 
     // Definir el esquema esperado de la respuesta
     const schema = z.object({
-      titles: z.array(z.string()).length(15),
-      authors: z.array(z.string()).length(15)
+      titles: z.array(z.string()).max(15),
+      authors: z.array(z.string()).max(15)
     });
 
     // Generar el objeto basado en el prompt y el esquema

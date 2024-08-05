@@ -3,19 +3,26 @@
     <div class="z-10 max-w-2xl px-5 xl:px-0">
       <!-- Imagen principal -->
       <div class="relative mb-10">
-        <div class="border bg-white shadow-sm flex aspect-square items-center justify-center overflow-hidden rounded-xl">
+        <div
+          class="border bg-white shadow-sm flex aspect-square items-center justify-center overflow-hidden rounded-xl"
+        >
           <img
             alt="Imagen de entrada"
             [src]="imageFile ? imageUrl : 'placeholder.png'"
             class="object-cover object-center w-full h-full"
           />
         </div>
-        <h1 class="text-4xl font-bold text-center mt-4 text-gray-900">La Playlist de tu canción</h1>
+        <h1 class="text-2xl font-bold text-center mt-4 text-gray-900">
+          La Playlist de tu foto
+        </h1>
       </div>
-      
+
       <!-- Lista de canciones -->
       <div class="space-y-8">
-        <div *ngFor="let song of songData; let i = index" class="flex items-center space-x-4 p-4 border rounded-lg shadow-md bg-white">
+        <div
+          *ngFor="let song of songData; let i = index"
+          class="flex items-center space-x-4 p-4 border rounded-lg shadow-md bg-white"
+        >
           <!-- Imagen de la canción -->
           <img
             *ngIf="song.cover"
@@ -25,7 +32,9 @@
           />
           <div class="flex-1">
             <!-- Información de la canción -->
-            <h2 class="text-xl font-semibold text-gray-900">{{ song.title }}</h2>
+            <h2 class="text-xl font-semibold text-gray-900">
+              {{ song.title }}
+            </h2>
             <p class="text-gray-600">{{ song.artist }}</p>
           </div>
           <!-- Reproductor de audio -->
@@ -48,3 +57,4 @@
     </div>
   </div>
 </main>
+<app-loading-overlay [loading]="loading"></app-loading-overlay>

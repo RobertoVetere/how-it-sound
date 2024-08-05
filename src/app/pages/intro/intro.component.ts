@@ -56,52 +56,43 @@ constructor(
   }
 
   ngOnDestroy() {
-  console.log('IntroComponent destroyed');
+  //IntroComponent destroyed
+  this.cleanUpAudioPlayer(this.audioPlayer);
+  this.cleanUpAudioPlayer(this.audioPlayerModal);
+  this.cleanUpSlideTrack();
+  this.revertDomChanges();
+  this.resetProperties();
+}
 
-  // Limpiar el elemento de audio principal
-  if (this.audioPlayer && this.audioPlayer.nativeElement) {
-    const audioElement = this.audioPlayer.nativeElement;
+private cleanUpAudioPlayer(player: ElementRef | null) {
+  if (player && player.nativeElement) {
+    const audioElement = player.nativeElement;
     if (audioElement.pause) {
-      audioElement.pause(); // Pausa la reproducción
-      audioElement.src = ''; // Limpia la fuente
-      audioElement.load(); // Recarga el elemento
+      audioElement.pause();
+      audioElement.src = '';
+      audioElement.load();
     }
   }
+}
 
-  // Limpiar el elemento de audio modal si existe
-  if (this.audioPlayerModal && this.audioPlayerModal.nativeElement) {
-    const audioElementModal = this.audioPlayerModal.nativeElement;
-    if (audioElementModal.pause) {
-      audioElementModal.pause();
-      audioElementModal.src = '';
-      audioElementModal.load();
-    }
-  }
-
-  // Limpiar el elemento de slide track
+private cleanUpSlideTrack() {
   if (this.slideTrack && this.slideTrack.nativeElement) {
     const slideTrackElement = this.slideTrack.nativeElement;
-    if (slideTrackElement.classList) {
-      slideTrackElement.classList.remove('animate-scroll');
-    }
+    slideTrackElement.classList?.remove('animate-scroll');
   }
+}
 
-  // Solo acceder al DOM si está definido (contexto del navegador)
+private revertDomChanges() {
   if (typeof document !== 'undefined') {
-    // Revertir cambios en el DOM
     const introContainer = document.getElementById('intro-container');
-    if (introContainer && introContainer.classList) {
-      introContainer.classList.remove('bg-gradient-animation');
-    }
+    introContainer?.classList?.remove('bg-gradient-animation');
 
     const buttonPlay = document.getElementById('btnPlayAndHideBtn');
-    if (buttonPlay && buttonPlay.classList) {
-      buttonPlay.classList.remove('hideBtn');
-    }
+    buttonPlay?.classList?.remove('hideBtn');
   }
+}
 
-  // Asegurarse de que el garbage collector pueda liberar memoria
-  // No hacer referencias a objetos que ya deberían ser destruidos
+private resetProperties() {
   this.audioPlayer = null!;
   this.audioPlayerModal = null!;
   this.slideTrack = null!;

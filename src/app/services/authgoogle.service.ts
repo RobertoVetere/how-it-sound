@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
-declare var google: any; // Declaración de la variable global de Google
+declare let google: any; // Declaración de la variable global de Google
 
 @Injectable({
   providedIn: 'root',
