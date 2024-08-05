@@ -40,10 +40,10 @@ export class ChatService {
     // Definir el prompt que se enviará al modelo
 const prompt = `
   Eres un experto en música, fotografía y literatura:
-  1. Dame el título de una canción que describa esta imagen (solo el título, SIN EL AUTOR!).
+  1. Dame el título de tres canciones que describan esta imagen (solo el título, SIN EL AUTOR!).
   2. Dame una poesía breve o texto breve de algún escritor que se ajuste a la imagen.
   3. Genera una paleta de colores que combine bien con la imagen.
-  4. Dame el autor de la canción.
+  4. Dame el autor de cada canción.
 `;
     // Definir el esquema esperado de la respuesta
     const schema = z.object({
