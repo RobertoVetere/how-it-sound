@@ -2,7 +2,7 @@
 
 # Phoson
 
-**Phoson** es una innovadora aplicación que combina inteligencia artificial y tecnología avanzada para ofrecer una experiencia única en el descubrimiento de música. Utilizando la potencia de OpenAI y el SDK de inteligencia artificial de Vercel, junto con la API de Deezer, **Phoson** permite a los usuarios encontrar canciones que se alinean perfectamente con las fotos que suben. ¡Descubre cómo tus imágenes pueden revelar nuevas melodías!
+**Phoson** es una innovadora aplicación que combina inteligencia artificial y tecnología avanzada para ofrecer una experiencia única en el descubrimiento de música. Utilizando la potencia de OpenAI y el SDK de inteligencia artificial de Vercel, junto con la API de Deezer, **Phoson** permite a los usuarios encontrar canciones y frases que se alinean perfectamente con las fotos que suben. ¡Descubre cómo tus imágenes pueden revelar nuevas melodías!
 
 ## 🚀 Características Principales
 
@@ -15,6 +15,32 @@
 - **OpenAI**: Proporciona capacidades avanzadas de análisis de imágenes y procesamiento de datos, permitiendo a **Phoson** entender el contenido visual de manera profunda.
 - **SDK de Vercel**: Integra la inteligencia artificial con la infraestructura en la nube para ofrecer un rendimiento rápido y confiable.
 - **API de Deezer**: Ofrece acceso a una vasta biblioteca de música para encontrar las canciones que mejor se adapten a las imágenes proporcionadas por los usuarios.
+
+### **Frontend**
+- **[Angular 18](https://angular.io/)**: Framework para la construcción de aplicaciones web de una sola página.
+- **TypeScript**: Lenguaje de programación que añade tipado estático a JavaScript.
+- **HTML** y **CSS**: Tecnologías fundamentales para la estructura y el estilo de la aplicación.
+
+### **Backend**
+- **[Spring Boot 3](https://spring.io/projects/spring-boot)**: Framework para desarrollar aplicaciones backend basadas en Java con configuración mínima.
+- **Java**: Lenguaje de programación utilizado en el backend.
+
+### **Almacenamiento de Sesiones**
+- **Session Storage**: Utilizado para almacenar datos temporales del lado del cliente.
+
+### **APIs**
+- **[OpenAI API](https://beta.openai.com/docs/)**: Proporciona capacidades de inteligencia artificial para analizar imágenes y generar recomendaciones.
+- **[Deezer API](https://developers.deezer.com/api)**: Permite la integración con la base de datos musical de Deezer para buscar canciones relacionadas con las imágenes.
+
+### **Despliegue**
+- **[Vercel](https://vercel.com/)**: Plataforma utilizada para el despliegue del frontend Angular, proporcionando una solución rápida y confiable para la entrega de contenido.
+- **[Railway](https://railway.app/)**: Plataforma utilizada para el despliegue del backend Spring Boot, ofreciendo una infraestructura sencilla y escalable.
+
+### **Revisión del Código**
+- **[SonarCloud](https://sonarcloud.io/)**: Plataforma para la revisión y análisis de calidad del código. SonarCloud ayuda a identificar y corregir problemas de calidad y seguridad en el código, proporcionando informes detallados y métricas.
+
+### **Otros**
+- **[GitHub](https://github.com/)**: Plataforma utilizada para el control de versiones y colaboración en el desarrollo del proyecto.
 
 ## 📸 Cómo Funciona
 
