@@ -68,7 +68,7 @@ export class PlaylistComponent implements OnInit, OnDestroy {
   }
 
   private async handleNewRequest(): Promise<void> {
-  await this.loadImage();
+  this.loadImage();
 }
 
 private async handleExistingRequest(): Promise<void> {
@@ -80,7 +80,7 @@ private async handleExistingRequest(): Promise<void> {
     this.songData = playlistData;
     this.createImageUrl(); // Crear la URL de la imagen
   } else {
-    await this.loadExistingPlaylist();
+    this.loadExistingPlaylist();
     this.imageFile = this.imageStorageService.getFile();
     if (this.imageFile) {
       this.createImageUrl();
