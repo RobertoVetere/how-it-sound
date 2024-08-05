@@ -5,35 +5,65 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ImageStorageService {
-  private storageKey = 'savedImage';
+  private dbName = 'imageDB';
+  private storeName = 'images';
 
-  setFile(file: File) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (typeof reader.result === 'string') {
-        localStorage.setItem(this.storageKey, reader.result);
+  constructor() {
+    this.openDB();
+  }
+
+  private openDB() {
+    const request = indexedDB.open(this.dbName, 1);
+    request.onupgradeneeded = (event: any) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains(this.storeName)) {
+        db.createObjectStore(this.storeName, { keyPath: 'id' });
       }
     };
-    reader.readAsDataURL(file);
+    request.onerror = (event: any) => console.error('Error opening IndexedDB:', event);
   }
 
-  getFile(): File | null {
-    const savedImage = localStorage.getItem(this.storageKey);
-    if (savedImage) {
-      const byteString = atob(savedImage.split(',')[1]);
-      const mimeString = savedImage.split(',')[0].split(':')[1].split(';')[0];
-      const arrayBuffer = new ArrayBuffer(byteString.length);
-      const uint8Array = new Uint8Array(arrayBuffer);
-      for (let i = 0; i < byteString.length; i++) {
-        uint8Array[i] = byteString.charCodeAt(i);
-      }
-      const blob = new Blob([uint8Array], { type: mimeString });
-      return new File([blob], 'image.jpg', { type: mimeString });
-    }
-    return null;
+  async setFile(file: File): Promise<void> {
+    const db = await this.openDBPromise();
+    const transaction = db.transaction(this.storeName, 'readwrite');
+    const store = transaction.objectStore(this.storeName);
+    store.put({ id: 'savedImage', file });
+    return new Promise((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = (event: any) => reject('Error saving image to IndexedDB');
+    });
   }
 
-  clearFile() {
-    localStorage.removeItem(this.storageKey);
+  async getFile(): Promise<File | null> {
+    const db = await this.openDBPromise();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(this.storeName, 'readonly');
+      const store = transaction.objectStore(this.storeName);
+      const getRequest = store.get('savedImage');
+      getRequest.onsuccess = (event: any) => {
+        const result = event.target.result;
+        resolve(result ? result.file : null);
+      };
+      getRequest.onerror = (event: any) => reject('Error retrieving image from IndexedDB');
+    });
+  }
+
+  async clearFile(): Promise<void> {
+    const db = await this.openDBPromise();
+    const transaction = db.transaction(this.storeName, 'readwrite');
+    const store = transaction.objectStore(this.storeName);
+    store.delete('savedImage');
+    return new Promise((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = (event: any) => reject('Error removing image from IndexedDB');
+    });
+  }
+
+  private openDBPromise(): Promise<IDBDatabase> {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(this.dbName);
+      request.onsuccess = (event: any) => resolve(event.target.result);
+      request.onerror = (event: any) => reject('Error opening IndexedDB');
+    });
   }
 }

@@ -72,35 +72,51 @@ export class PlaylistComponent implements OnInit, OnDestroy {
 }
 
 private async handleExistingRequest(): Promise<void> {
-  const imageFileData = this.imageStorageService.getFile();
-  const playlistData = this.playlistService.getPlaylist();
+  try {
+    // Espera a que la promesa se resuelva
+    const imageFileData = await this.imageStorageService.getFile();
+    // Supongamos que `getPlaylist` también devuelve una promesa
+    const playlistData = await this.playlistService.getPlaylist();
 
-  if (imageFileData && playlistData.length > 0) {
-    this.imageFile = imageFileData;
-    this.songData = playlistData;
-    this.createImageUrl(); // Crear la URL de la imagen
-  } else {
-    this.loadExistingPlaylist();
-    this.imageFile = this.imageStorageService.getFile();
-    if (this.imageFile) {
-      this.createImageUrl();
+    // Verifica si hay datos de imagen y datos de la lista de reproducción
+    if (imageFileData && playlistData.length > 0) {
+      this.imageFile = imageFileData;
+      this.songData = playlistData;
+      this.createImageUrl(); // Crear la URL de la imagen
+    } else {
+      this.loadExistingPlaylist();
+      this.imageFile = await this.imageStorageService.getFile(); // Usa await aquí también
+      if (this.imageFile) {
+        this.createImageUrl();
+      }
+      this.loaderService.hide(); // Ocultar loader después de la carga de la lista existente
+      this.playlistStore.update({ isNew: false });
     }
-    this.loaderService.hide(); // Ocultar loader después de la carga de la lista existente
-    this.playlistStore.update({ isNew: false });
-
+  } catch (error) {
+    console.error('Error handling existing request:', error);
+    // Aquí puedes manejar el error, como mostrar un mensaje al usuario
+    this.loaderService.hide(); // Asegúrate de ocultar el loader en caso de error
   }
 }
 
 
-  private loadImage(): void {
-    this.imageFile = this.imageStorageService.getFile();
+  private async loadImage(): Promise<void> {
+  try {
+    // Espera a que la promesa se resuelva
+    this.imageFile = await this.imageStorageService.getFile();
+    
     if (this.imageFile) {
-      this.processImage();
+      await this.processImage(); // Asegúrate de que `processImage` sea una función asíncrona si es necesario
       this.createImageUrl();
     } else {
       console.warn('No image file found in imageStorageService.');
     }
+  } catch (error) {
+    console.error('Error loading image:', error);
+    // Aquí puedes manejar el error, como mostrar un mensaje al usuario
   }
+}
+
 
   private loadExistingPlaylist(): void {
     this.songData = this.playlistService.getPlaylist();
