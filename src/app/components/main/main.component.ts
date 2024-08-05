@@ -67,21 +67,21 @@ createPlaylist() {
 
 async ngOnInit(): Promise<void> {
   this.loaderService.show();
-    const file = this.imageStorageService.getFile();
-    
+  try {
+    const file = await this.imageStorageService.getFile(); // Espera a que se resuelva la promesa
     if (file && file instanceof File) {
       this.imageData.file = file;
-      
-      try {
-        this.imageData.src = await this.imageProcessingService.compressImage(file);
-      } catch (error) {
-        console.error('Error al comprimir la imagen:', error);
-      }
+      this.imageData.src = await this.imageProcessingService.compressImage(file);
     } else {
       console.error('El archivo obtenido no es válido o no es una instancia de File');
     }
+  } catch (error) {
+    console.error('Error al obtener el archivo:', error);
+  } finally {
     this.loaderService.hide();
   }
+}
+
 
 
   ngAfterViewInit() {
@@ -107,17 +107,17 @@ async ngOnInit(): Promise<void> {
 }
 
  private async loadSavedImage() {
-    const savedFile = this.imageStorageService.getFile();
+  try {
+    const savedFile = await this.imageStorageService.getFile(); // Espera a que se resuelva la promesa
     if (savedFile) {
-      try {
-        this.imageData.src = await this.readFileAsDataURL(savedFile);
-        this.imageData.file = savedFile;
-        this.cdr.detectChanges();
-      } catch (error) {
-        console.error('Error al cargar la imagen guardada:', error);
-      }
+      this.imageData.src = await this.readFileAsDataURL(savedFile);
+      this.imageData.file = savedFile;
+      this.cdr.detectChanges();
     }
+  } catch (error) {
+    console.error('Error al cargar la imagen guardada:', error);
   }
+}
 
 private updateTime = () => {
   this.currentTime = (this.audioPlayer!.currentTime / this.audioPlayer!.duration) * 100;
