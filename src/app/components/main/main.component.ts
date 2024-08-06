@@ -205,7 +205,7 @@ private readFileAsDataURL(file: File): Promise<string> {
   searchSong(songAuthor: string, songTitle: string) {
     this.deezerService.findSongOnDeezer(songAuthor, songTitle).subscribe({
       next: async (link: string) => {
-        console.log(link);
+        //console.log(link);
         this.songData.link = link;
         if (this.audioPlayer) {
           this.audioPlayer.src = this.songData.link;
@@ -230,7 +230,7 @@ private readFileAsDataURL(file: File): Promise<string> {
         if (this.apiCallsLeft > 0) {
           this.analizeImage().then(() => {
             this.apiCallsLeft -= 1;
-            console.log("quedan: " + this.apiCallsLeft + " intentos");
+            //console.log("quedan: " + this.apiCallsLeft + " intentos");
           }).catch(err => {
             alert("¡Ups! Algo ha salido mal, prueba de nuevo");
           });

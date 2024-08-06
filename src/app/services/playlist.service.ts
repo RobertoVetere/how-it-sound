@@ -8,13 +8,13 @@ export class PlaylistService {
   private storageKey = 'user-playlist';
 
   savePlaylist(songData: SongPlaylist[]): void {
-    console.log('Saving playlist to session storage:', songData);
+    //console.log('Saving playlist to session storage:', songData);
     sessionStorage.setItem(this.storageKey, JSON.stringify(songData));
   }
 
   getPlaylist(): SongPlaylist[] {
     const data = sessionStorage.getItem(this.storageKey);
-    console.log('Loaded playlist from session storage:', data);
+    //console.log('Loaded playlist from session storage:', data);
     return data ? JSON.parse(data) : [];
   }
 

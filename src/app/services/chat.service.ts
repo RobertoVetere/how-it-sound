@@ -71,9 +71,9 @@ const prompt = `
     });
 
     // Log y retornar el resultado
-    console.log(result.object);
-    console.log(this.selectedStyle)
-    console.log(prompt)
+    //console.log(result.object);
+    //console.log(this.selectedStyle)
+    //console.log(prompt)
     return result.object;
 
   } catch (error) {
@@ -135,9 +135,9 @@ async analyzeTextWithImageToPlaylist(imageFile: File) {
     });
 
     // Log y retornar el resultado
-    console.log(result.object);
-    console.log(this.selectedStyle);
-    console.log(prompt);
+    //console.log(result.object);
+    //console.log(this.selectedStyle);
+    //console.log(prompt);
     return result.object;
 
   } catch (error) {
